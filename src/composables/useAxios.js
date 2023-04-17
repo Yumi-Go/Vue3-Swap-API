@@ -1,15 +1,13 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-export function useAxios() {
-
-    function getData() {
-        axios.get('https://swapi.dev/api/').then((response) => {
-            console.log(response);
-        });
-        return response;
-    }
-
+export function useAxiosAll() {
+    const all = ref([]);
+    axios.get('https://swapi.dev/api/').then((response) => {
+        console.log(response);
+        all.value.push = response;
+    });
+    return all;
 }
 
 export function useAxiosUsers() {

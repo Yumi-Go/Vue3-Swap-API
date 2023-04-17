@@ -9,13 +9,13 @@ import axios from 'axios';
 <div>
 
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
+    <table class="">
+        <thead class="">
+            <tr class="bg-gray-500">
                 <th>table head</th> <!-- dynamic column name rendering here -->
             </tr>
         </thead>
-        <tbody>
+        <tbody class="">
             <tr>
                 <td>table cell</td> <!-- dynamic value rendering here -->
             </tr>

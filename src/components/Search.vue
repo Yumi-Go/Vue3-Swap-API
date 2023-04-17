@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+
+const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
+const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
 const search = ref('');
 </script>

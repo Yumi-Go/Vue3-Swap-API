@@ -1,29 +1,32 @@
 import { ref } from 'vue'
 import axios from 'axios'
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
-export function useAxiosAll() {
-    const all = ref([]);
-    axios.get('https://swapi.dev/api/').then((response) => {
-        console.log(response);
-        all.value.push = response;
-    });
-    return all;
-}
+const saveUsers = useLocalStorage('users', []);
+const savePlanets = useLocalStorage('planets', []);
+const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
+const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
 export function useAxiosUsers() {
-    const user = ref([]);
     axios.get('https://swapi.dev/api/people/').then((response) => {
-        console.log(response);
-        user.value.push = response;
+        // console.log(response.data.results);
+        // user.value.push = response;
+        if (getAllUsers.value.length == 0) {
+            // saveUsers.value.push(response.data.results);
+            response.data.results.forEach(user => saveUsers.value.push(user));
+        }
+
     });
-    return user;
 }
 
 export function useAxiosPlanets() {
-    const planet = ref([]);
     axios.get('https://swapi.dev/api/planets/').then((response) => {
-        console.log(response);
-        planet.value.push = response;
+        // console.log(response.data.results);
+        // planet.value.push = response;
+        if (getAllPlanets.value.length == 0) {
+            // savePlanets.value.push(response.data.results);
+            response.data.results.forEach(planet => savePlanets.value.push(planet));
+
+        }
     });
-    return planet;
 }

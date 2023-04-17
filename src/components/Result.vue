@@ -6,15 +6,15 @@
 <template>
 
 <div>
-    <table>
+    <table class="table-auto">
         <thead>
             <tr>
-                <th></th> <!-- dynamic column name rendering here -->
+                <th>table head</th> <!-- dynamic column name rendering here -->
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td></td> <!-- dynamic value rendering here -->
+                <td>table cell</td> <!-- dynamic value rendering here -->
             </tr>
         </tbody>
     </table>

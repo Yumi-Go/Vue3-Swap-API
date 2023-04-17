@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios';
 
 </script>
 
@@ -6,7 +7,9 @@
 <template>
 
 <div>
-    <table class="table-auto">
+
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>table head</th> <!-- dynamic column name rendering here -->
@@ -24,3 +27,9 @@
 
 
 </template>
+
+<style scoped>
+.list-group-item {
+    border-radius: 0;
+}
+</style>

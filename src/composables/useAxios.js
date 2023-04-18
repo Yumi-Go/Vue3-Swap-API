@@ -22,17 +22,37 @@ export async function useAxiosUsers() {
         }   
     }
     responsesList.forEach(res => console.log(res));
-    console.log("length: ", responsesList.length);
+    console.log("users length: ", responsesList.length);
     return responsesList;
 
 }
 
-
-export function useAxiosPlanets() {
-    axios.get('https://swapi.dev/api/planets/').then((response) => {
-        if (getAllPlanets.value.length == 0) {
-            response.data.results.forEach(planet => savePlanets.value.push(planet));
-
-        }
-    });
+export async function useAxiosPlanets() {
+    const responsesList = [];
+    for (let planetCount = 1; planetCount < 100; planetCount++) {
+        try {
+            const response = await axios.get(`https://swapi.dev/api/planets/${planetCount}`);
+            if (response.status) {
+                responsesList.push(response);
+            }
+        } catch (error) {
+            console.error(error);
+        }   
+    }
+    responsesList.forEach(res => console.log(res));
+    console.log("planets length: ", responsesList.length);
+    return responsesList;
 }
+
+
+
+
+
+// export function useAxiosPlanets() {
+//     axios.get('https://swapi.dev/api/planets/').then((response) => {
+//         if (getAllPlanets.value.length == 0) {
+//             response.data.results.forEach(planet => savePlanets.value.push(planet));
+
+//         }
+//     });
+// }

@@ -9,10 +9,34 @@ const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSeri
 useAxiosUsers();
 useAxiosPlanets();
 
-console.log(getAllUsers.value);
-console.log(getAllPlanets.value);
+// console.log(getAllUsers.value);
+// console.log(getAllPlanets.value);
 
 const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
+
+function columnContents(index) {
+
+    const userRow = [];
+    const lowercaseColNames = columnNames.map(name => name.toLowerCase());
+    const user = Object.values(getAllUsers.value)[index];
+    console.log(user);
+    
+    for (const [key, value] of Object.entries(user)) {
+        console.log(`${key}: ${value}`);
+        if (lowercaseColNames.includes(key)) {
+            userRow.push(value);
+        }
+    }
+
+    console.log("userRow: ", userRow);
+    return userRow;
+
+
+
+
+
+}
+
 
 </script>
 
@@ -28,8 +52,8 @@ const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr class="border-solid border-2">
-                <td class="border-solid border-2">table cell</td> <!-- dynamic value rendering here -->
+            <tr v-for="i in getAllUsers.length" class="border-solid border-2">
+                <td v-for="cell in columnContents(i-1)" class="border-solid border-2">{{ cell }}</td>
             </tr>
         </tbody>
     </table>

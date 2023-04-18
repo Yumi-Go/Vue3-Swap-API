@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAxiosUsers, useAxiosPlanets } from '../composables/useAxios';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
+
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
@@ -12,30 +13,25 @@ useAxiosPlanets();
 // console.log(getAllUsers.value);
 // console.log(getAllPlanets.value);
 
-const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
+// const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
 
-function columnContents(index) {
+// function columnContents(index) {
 
-    const userRow = [];
-    const lowercaseColNames = columnNames.map(name => name.toLowerCase());
-    const user = Object.values(getAllUsers.value)[index];
-    console.log(user);
+//     const userRow = [];
+//     const lowercaseColNames = columnNames.map(name => name.toLowerCase());
+//     const user = Object.values(getAllUsers.value)[index];
+//     console.log(user);
     
-    for (const [key, value] of Object.entries(user)) {
-        console.log(`${key}: ${value}`);
-        if (lowercaseColNames.includes(key)) {
-            userRow.push(value);
-        }
-    }
+//     for (const [key, value] of Object.entries(user)) {
+//         if (lowercaseColNames.includes(key)) {
+//             userRow.push(value);
+//         }
+//     }
 
-    console.log("userRow: ", userRow);
-    return userRow;
+//     console.log("userRow: ", userRow);
+//     return userRow;
 
-
-
-
-
-}
+// }
 
 
 </script>
@@ -45,7 +41,7 @@ function columnContents(index) {
 
 <div>
 
-    <table class="w-[600px] table-auto border-solid border-2">
+    <!-- <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
                 <th v-for="column in columnNames" class="border-solid border-2">{{ column }}</th>
@@ -56,7 +52,7 @@ function columnContents(index) {
                 <td v-for="cell in columnContents(i-1)" class="border-solid border-2">{{ cell }}</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 
 
 </div>

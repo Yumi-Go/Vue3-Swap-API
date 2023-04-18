@@ -8,27 +8,22 @@ const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializ
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
 
-export function useAxiosUsers() {
+export async function useAxiosUsers() {
     
     const responsesList = [];
     for (let userCount = 1; userCount < 100; userCount++) {
-        const response = axios.get(`https://swapi.dev/api/people/${userCount}`);
-            responsesList.push(response);
+        try {
+            const response = await axios.get(`https://swapi.dev/api/people/${userCount}`);
+            if (response.status) {
+                responsesList.push(response);
+            }
+        } catch (error) {
+            console.error(error);
+        }   
     }
-
     responsesList.forEach(res => console.log(res));
     console.log("length: ", responsesList.length);
     return responsesList;
-
-
-
-
-
-
-
-
-
-
 
 }
 

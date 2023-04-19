@@ -28,7 +28,7 @@ export function useAxiosUsers() {
 
     async function getPlanetName(planetURL) {
         try {
-            const response = await axios.get(planetURL)
+            const response = await axios.get(planetURL);
             let result = response.data.name;
             return result;
         } catch (error) {
@@ -39,18 +39,26 @@ export function useAxiosUsers() {
     async function refineUsersDB() {
         try {
             const allUsersRefinedData = [];
-            const usersRawData = Object.values(Promise.resolve(await getValidUsers()));
+            const usersRawData = await getValidUsers();
             usersRawData.forEach(user => {
                 const userRefinedData = [];
                 for (const [key, value] of Object.entries(user.data)) {
                     if (userItems.includes(key)) {
+                        // console.log("user.data key: ", key);
+                        // console.log("user.data value: ", value);
                         userRefinedData.push(value);
-                    }
-                    if (key === "homeworld") {
-                        getPlanetName(value);
-                        userRefinedData.push(Promise.resolve(getPlanetName(value)));
+                    } else {
+                        if (key === "homeworld") {
+
+                            Promise.resolve(getPlanetName(value))
+                            .then((planetName) => {
+                                console.log("planetName: ", planetName);
+                                userRefinedData.push(planetName); // this push is working, but not shown in local storage
+                            });
+                        }
                     }
                 }
+                console.log("userRefinedData: ", userRefinedData);
                 allUsersRefinedData.push(userRefinedData);
             });
             return allUsersRefinedData;
@@ -97,7 +105,7 @@ export function useAxiosPlanets() {
     async function refinePlanetsDB() {
         try {
             const allPlanetsRefinedData = [];            
-            const planetsRawData = Object.values(Promise.resolve(await getValidPlanets()));
+            const planetsRawData = await getValidPlanets();
             planetsRawData.forEach(planet => {
                 const planetRefinedData = [];
                 for (const [key, value] of Object.entries(planet.data)) {

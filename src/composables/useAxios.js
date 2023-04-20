@@ -51,8 +51,14 @@ export function useAxiosUsers() {
                         if (userItems.includes(key)) {
                             userRefinedData.push(value);
                         }
+                        if (key === "homeworld") {
+                            Promise.resolve(getPlanetName(value))
+                            .then(pName => {
+                                userRefinedData.push(pName); // this push is working but planet name is not shown in local storage
+                            });
+                        }
+
                     }
-                    console.log("userRefinedData: ", userRefinedData);
                     allUsersRefinedData.push(userRefinedData);
                 });
             });

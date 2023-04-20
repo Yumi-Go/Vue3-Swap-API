@@ -7,16 +7,17 @@ const savePlanets = useLocalStorage('planets', []);
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const planetNames = ref([]);
+// request data for every user at once
+
 export function useAxiosUsers() {
 
     const userItems = ['name', 'height', 'mass', 'created', 'edited', 'planet name'];
 
-    async function getValidUsers() {
+    async function getEachPageUsers() {
         const responsesList = [];
-        for (let userCount = 1; userCount < 100; userCount++) {
+        for (let pageCount = 1; pageCount < 10; pageCount++) {
             try {
-                const response = await axios.get(`https://swapi.dev/api/people/${userCount}`);
+                const response = await axios.get(`https://swapi.dev/api/people/?page=${pageCount}`);
                 if (response.status) {
                     responsesList.push(response);
                 }
@@ -26,6 +27,9 @@ export function useAxiosUsers() {
         }
         return responsesList;
     }
+
+
+
 
     async function getPlanetName(planetURL) {
         try {
@@ -39,22 +43,18 @@ export function useAxiosUsers() {
     async function refineUsersDB() {
         try {
             const allUsersRefinedData = [];
-            const usersRawData = await getValidUsers();
-            usersRawData.forEach(user => {
-                const userRefinedData = [];
-                for (const [key, value] of Object.entries(user.data)) {
-                    if (userItems.includes(key)) {
-                        userRefinedData.push(value);
+            const usersRawDataEachPage = await getEachPageUsers();
+            usersRawDataEachPage.forEach(rawUser => {
+                Object.values(rawUser.data.results).forEach(user => {
+                    const userRefinedData = [];
+                    for (const [key, value] of Object.entries(user)) {
+                        if (userItems.includes(key)) {
+                            userRefinedData.push(value);
+                        }
                     }
-                    if (key === "homeworld") {
-                        Promise.resolve(getPlanetName(value))
-                        .then(pName => {
-                            userRefinedData.push(pName); // this push is working but planet name is not shown in local storage
-                        });
-                    }
-                }
-                console.log("userRefinedData: ", userRefinedData);
-                allUsersRefinedData.push(userRefinedData);
+                    console.log("userRefinedData: ", userRefinedData);
+                    allUsersRefinedData.push(userRefinedData);
+                });
             });
             return allUsersRefinedData;
         } catch (error) {

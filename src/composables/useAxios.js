@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import axios from 'axios'
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
@@ -6,7 +7,7 @@ const savePlanets = useLocalStorage('planets', []);
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-
+const planetNames = ref([]);
 export function useAxiosUsers() {
 
     const userItems = ['name', 'height', 'mass', 'created', 'edited', 'planet name'];
@@ -29,8 +30,7 @@ export function useAxiosUsers() {
     async function getPlanetName(planetURL) {
         try {
             const response = await axios.get(planetURL);
-            let result = response.data.name;
-            return result;
+            return response.data.name;
         } catch (error) {
             console.error(error);
         }
@@ -44,18 +44,13 @@ export function useAxiosUsers() {
                 const userRefinedData = [];
                 for (const [key, value] of Object.entries(user.data)) {
                     if (userItems.includes(key)) {
-                        // console.log("user.data key: ", key);
-                        // console.log("user.data value: ", value);
                         userRefinedData.push(value);
-                    } else {
-                        if (key === "homeworld") {
-
-                            Promise.resolve(getPlanetName(value))
-                            .then((planetName) => {
-                                console.log("planetName: ", planetName);
-                                userRefinedData.push(planetName); // this push is working, but not shown in local storage
-                            });
-                        }
+                    }
+                    if (key === "homeworld") {
+                        Promise.resolve(getPlanetName(value))
+                        .then(pName => {
+                            userRefinedData.push(pName); // this push is working but planet name is not shown in local storage
+                        });
                     }
                 }
                 console.log("userRefinedData: ", userRefinedData);

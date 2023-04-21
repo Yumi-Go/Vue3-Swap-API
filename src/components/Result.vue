@@ -1,40 +1,62 @@
 <script setup>
-import axios from 'axios';
-import { useAxiosUsers, useAxiosPlanets } from '../composables/useAxios';
+import { ref } from 'vue';
+import { useFetchUsers, useFetchPlanets, currentPage } from '../composables/useFetch';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const { userItems, saveUsersToStorage } = useAxiosUsers();
-const { planetItems, savePlanetsToStorage } = useAxiosPlanets();
+const { userItems, saveUsersToStorage } = useFetchUsers();
+const { planetItems, savePlanetsToStorage } = useFetchPlanets();
 
-saveUsersToStorage();
-savePlanetsToStorage();
+// const currentPage = ref();
+
+// saveUsersToStorage(1);
+// savePlanetsToStorage(1);
 
 console.log(getAllUsers.value);
 console.log(getAllPlanets.value);
 
+const pageNums = [1,2,3,4,5,6,7,8,9];
+const tableData = ref([]);
 
-function columnContents(index) {
+
+function getTableData(pNum) {
     const userRow = [];
-    const lowercaseColNames = userItems.map(name => name.toLowerCase());
-    const user = getAllUsers.value[index];
-    for (const [key, value] of Object.entries(user)) {
-        if (lowercaseColNames.includes(key)) {
-            userRow.push(value);
-        }
-    }
+    const user = getAllUsers.value.length;
+    console.log("user:", user);
+    console.log("userRow: ", userRow);
     return userRow;
 }
+
+function pageButtonClick(pNum) {
+    saveUsersToStorage(pNum);
+    getTableData(pNum);
+}
+
+
+
+
+
+
+
+
+// function columnContents(index) {
+//     const userRow = [];
+//     const lowercaseColNames = userItems.map(name => name.toLowerCase());
+//     const user = getAllUsers.value.length;
+//     console.log("user:", user);
+//     console.log("userRow: ", userRow);
+//     return userRow;
+// }
 
 </script>
 
 
 <template>
 
-<div>
+<div class="">
 
     <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
@@ -43,15 +65,27 @@ function columnContents(index) {
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="i in getAllUsers.length" class="border-solid border-2">
-                <td v-for="cell in columnContents(i-1)" class="border-solid border-2">{{ cell }}</td>
+            <!-- <tr v-for="(item,index) in getAllUsers" class="border-solid border-2">
+                <td v-for="cell in columnContents(index)" class="border-solid border-2">{{ cell }}</td>
+            </tr> -->
+            <tr v-for="user in getAllUsers" class="border-solid border-2">
+                <td v-for="item in userItems">{{ user[item] }}</td>
             </tr>
         </tbody>
     </table>
-
-
 </div>
 
+<div class="flex flex-row">
+    <div v-for="pNum in pageNums">
+        <button
+        @click="pageButtonClick(pNum)"
+        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+            {{ pNum }}
+        </button>
+
+    </div>
+</div>
 
 </template>
 

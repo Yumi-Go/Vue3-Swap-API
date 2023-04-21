@@ -1,19 +1,14 @@
 <script setup>
 import { ref } from 'vue';
-import { useFetchUsers, useFetchPlanets, currentPage } from '../composables/useFetch';
+import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const { userItems, saveUsersToStorage } = useFetchUsers();
+const { userItems, saveUsersToStorage, currentPage } = useFetchUsers();
 const { planetItems, savePlanetsToStorage } = useFetchPlanets();
-
-// const currentPage = ref();
-
-// saveUsersToStorage(1);
-// savePlanetsToStorage(1);
 
 console.log(getAllUsers.value);
 console.log(getAllPlanets.value);
@@ -21,35 +16,28 @@ console.log(getAllPlanets.value);
 const pageNums = [1,2,3,4,5,6,7,8,9];
 const tableData = ref([]);
 
+saveUsersToStorage(currentPage.value);
+getTableData(currentPage.value);
 
-function getTableData(pNum) {
+function getTableData(pageNum) {
+    saveUsersToStorage(pageNum);
     const userRow = [];
-    const user = getAllUsers.value.length;
-    console.log("user:", user);
+    console.log("users number:", getAllUsers.value.length);
+    const user = getAllUsers.value[pageNum-1];
+    console.log("user: ", user);
+    for (const [key, value] of Object.entries(getAllUsers.value)) {
+        if (userItems.includes(key)) {
+            userRow.push(value);
+        }
+    }
     console.log("userRow: ", userRow);
     return userRow;
 }
 
-function pageButtonClick(pNum) {
-    saveUsersToStorage(pNum);
-    getTableData(pNum);
+function pageButtonClick(pageNum) {
+    currentPage.value = pageNum;
+    getTableData(currentPage.value);
 }
-
-
-
-
-
-
-
-
-// function columnContents(index) {
-//     const userRow = [];
-//     const lowercaseColNames = userItems.map(name => name.toLowerCase());
-//     const user = getAllUsers.value.length;
-//     console.log("user:", user);
-//     console.log("userRow: ", userRow);
-//     return userRow;
-// }
 
 </script>
 
@@ -65,9 +53,6 @@ function pageButtonClick(pNum) {
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <!-- <tr v-for="(item,index) in getAllUsers" class="border-solid border-2">
-                <td v-for="cell in columnContents(index)" class="border-solid border-2">{{ cell }}</td>
-            </tr> -->
             <tr v-for="user in getAllUsers" class="border-solid border-2">
                 <td v-for="item in userItems">{{ user[item] }}</td>
             </tr>

@@ -12,11 +12,10 @@ export function useFetchUsers() {
 
     const userItems = ['name', 'height', 'mass', 'created', 'edited', 'planet name'];
 
-    async function singlePageUsers(pNum) {
+    async function singlePageUsers(pageNum) {
         try {
-            const response = await fetch(`https://swapi.dev/api/people/?page=${pNum}`);
+            const response = await fetch(`https://swapi.dev/api/people/?page=${pageNum}`);
             const jsonData = await response.json();
-            console.log("jsonData.results: ", jsonData.results);
             return jsonData.results;
 
         } catch (error) {
@@ -34,12 +33,10 @@ export function useFetchUsers() {
         }
     }
 
-    async function refineUsersDB(pNum) {
+    async function refineUsersDB(pageNum) {
         try {
             const pageUsersRefinedData = [];
-            const usersRawData = await singlePageUsers(pNum);
-            console.log("usersRawData", usersRawData);
-
+            const usersRawData = await singlePageUsers(pageNum);
             usersRawData.forEach(user => {
                 const userRefinedData = {};
                 for (const [key, value] of Object.entries(user)) {
@@ -49,15 +46,11 @@ export function useFetchUsers() {
                     if (key === "homeworld") {
                         getPlanetName(value)
                         .then(planet => {
-                            console.log("planet: ", planet);
-                            console.log("type of planet: ", typeof planet);
                             userRefinedData[key] = planet; // this push is working but planet name is not shown in local storage
                         });
                     }
                 }
-                console.log("userRefinedData: ", userRefinedData);
                 pageUsersRefinedData.push(userRefinedData);
-                console.log("pageUsersRefinedData: ", pageUsersRefinedData);
             });
             return pageUsersRefinedData;
         } catch (error) {
@@ -65,20 +58,21 @@ export function useFetchUsers() {
         }
     }
 
-    async function saveUsersToStorage(pNum) {
+    async function saveUsersToStorage(pageNum) {
         try {
-            if (!alreadyLoadedPages.includes(pNum)) {
-                Object.values(await refineUsersDB(pNum)).forEach(user => {
+            currentPage.value = pageNum;
+            if (!alreadyLoadedPages.value.includes(pageNum)) {
+                Object.values(await refineUsersDB(pageNum)).forEach(user => {
                     saveUsers.value.push(user);
                 });
-                alreadyLoadedPages.push(pNum);
+                alreadyLoadedPages.value.push(pageNum);
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { userItems, saveUsersToStorage }
+    return { currentPage, userItems, saveUsersToStorage }
 }
 
 
@@ -86,11 +80,10 @@ export function useFetchPlanets() {
 
     const planetItems = ['name', 'diameter', 'climate', 'population'];
 
-    async function singlePagePlanets(pNum) {
+    async function singlePagePlanets(pageNum) {
         try {
-            const response = await fetch(`https://swapi.dev/api/planets/?page=${pNum}`);
+            const response = await fetch(`https://swapi.dev/api/planets/?page=${pageNum}`);
             const jsonData = await response.json();
-            console.log("jsonData.results: ", jsonData.results);
             return jsonData.results;
 
         } catch (error) {
@@ -98,23 +91,19 @@ export function useFetchPlanets() {
         }
     }
 
-    async function refinePlanetsDB(pNum) {
+    async function refinePlanetsDB(pageNum) {
         try {
             const pagePlanetsRefinedData = [];
-            const planetsRawData = await singlePagePlanets(pNum);
-            console.log("planetsRawData", planetsRawData);
+            const planetsRawData = await singlePagePlanets(pageNum);
 
             planetsRawData.forEach(planet => {
                 const planetRefinedData = {};
-                console.log("planet: ", planet);
                 for (const [key, value] of Object.entries(planet)) {
                     if (planetItems.includes(key)) {
                         planetRefinedData[key] = value;                    
                     }
                 }
-                console.log("planetRefinedData: ", planetRefinedData);
                 pagePlanetsRefinedData.push(planetRefinedData);
-                console.log("pageUsersRefinedData: ", pagePlanetsRefinedData);
             });
             return pagePlanetsRefinedData;
         } catch (error) {
@@ -123,12 +112,14 @@ export function useFetchPlanets() {
     }
 
 
-    async function savePlanetsToStorage(pNum) {
+    async function savePlanetsToStorage(pageNum) {
         try {
-            if (!alreadyLoadedPages.includes(pNum)) {
-                Object.values(await refinePlanetsDB(pNum)).forEach(planet => {
+            currentPage.value = pageNum;
+            if (!alreadyLoadedPages.value.includes(pageNum)) {
+                Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
                     savePlanets.value.push(planet);
                 });
+                alreadyLoadedPages.value.push(pageNum);
             }
         } catch (error) {
             console.error(error);

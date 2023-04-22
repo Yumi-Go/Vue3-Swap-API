@@ -1,10 +1,8 @@
 import { ref } from 'vue';
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+import { useLocalStorage } from '@vueuse/core';
 
 const saveUsers = useLocalStorage('users', []);
 const savePlanets = useLocalStorage('planets', []);
-const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
-const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 const alreadyLoadedPages = ref([]);
 const currentPage = ref([1]);
 const currentPageData = ref([]);
@@ -52,8 +50,6 @@ export function useFetchUsers() {
                 }
                 pageUsersRefinedData.push(userRefinedData);
             });
-            console.log("pageUsersRefinedData: ", pageUsersRefinedData);
-
             return pageUsersRefinedData;
         } catch (error) {
             console.error(error);
@@ -64,22 +60,20 @@ export function useFetchUsers() {
         try {
             currentPage.value = pageNum;
             if (!alreadyLoadedPages.value.includes(pageNum)) {
-                const currentPageUsers = [];
+                const users = [];
                 Object.values(await refineUsersDB(pageNum)).forEach(user => {
                     saveUsers.value.push(user);
-                    currentPageUsers.push(user);
-                    console.log("each user: ", user);
+                    users.push(user);
                 });
-                currentPageData.value = currentPageUsers;
+                currentPageData.value = users;
                 alreadyLoadedPages.value.push(pageNum);
-                console.log("alreadyLoadedPages: ", alreadyLoadedPages.value);
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { currentPage, currentPageData, userItems, saveUsersToStorage }
+    return { currentPage, currentPageData, userItems, alreadyLoadedPages, saveUsersToStorage }
 }
 
 
@@ -102,7 +96,6 @@ export function useFetchPlanets() {
         try {
             const pagePlanetsRefinedData = [];
             const planetsRawData = await singlePagePlanets(pageNum);
-
             planetsRawData.forEach(planet => {
                 const planetRefinedData = {};
                 for (const [key, value] of Object.entries(planet)) {

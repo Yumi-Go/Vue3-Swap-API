@@ -1,13 +1,11 @@
 <script setup>
-import { ref } from 'vue';
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
-
 
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const { userItems, saveUsersToStorage, currentPage, currentPageData } = useFetchUsers();
+const { userItems, saveUsersToStorage, currentPage, currentPageData, alreadyLoadedPages } = useFetchUsers();
 const { planetItems, savePlanetsToStorage } = useFetchPlanets();
 
 console.log(getAllUsers.value);
@@ -15,8 +13,9 @@ console.log(getAllPlanets.value);
 
 const pageNums = [1,2,3,4,5,6,7,8,9];
 saveUsersToStorage(currentPage.value);
-currentPageData.value = getAllUsers.value;
+// currentPageData.value = getAllUsers.value;
 console.log(currentPageData.value);
+alreadyLoadedPages.value.push(1);
 
 async function changeTableData(pageNum) {
     await saveUsersToStorage(pageNum);
@@ -36,7 +35,6 @@ function pageButtonClick(pageNum) {
     currentPage.value = pageNum;
     changeTableData(currentPage.value);
 }
-
 
 </script>
 

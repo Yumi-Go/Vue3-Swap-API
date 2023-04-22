@@ -7,6 +7,7 @@ const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializ
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 const alreadyLoadedPages = ref([]);
 const currentPage = ref([1]);
+const currentPageData = ref([]);
 
 export function useFetchUsers() {
 
@@ -17,7 +18,6 @@ export function useFetchUsers() {
             const response = await fetch(`https://swapi.dev/api/people/?page=${pageNum}`);
             const jsonData = await response.json();
             return jsonData.results;
-
         } catch (error) {
             console.error(error);
         }
@@ -52,6 +52,8 @@ export function useFetchUsers() {
                 }
                 pageUsersRefinedData.push(userRefinedData);
             });
+            console.log("pageUsersRefinedData: ", pageUsersRefinedData);
+
             return pageUsersRefinedData;
         } catch (error) {
             console.error(error);
@@ -62,17 +64,22 @@ export function useFetchUsers() {
         try {
             currentPage.value = pageNum;
             if (!alreadyLoadedPages.value.includes(pageNum)) {
+                const currentPageUsers = [];
                 Object.values(await refineUsersDB(pageNum)).forEach(user => {
                     saveUsers.value.push(user);
+                    currentPageUsers.push(user);
+                    console.log("each user: ", user);
                 });
+                currentPageData.value = currentPageUsers;
                 alreadyLoadedPages.value.push(pageNum);
+                console.log("alreadyLoadedPages: ", alreadyLoadedPages.value);
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { currentPage, userItems, saveUsersToStorage }
+    return { currentPage, currentPageData, userItems, saveUsersToStorage }
 }
 
 
@@ -110,7 +117,6 @@ export function useFetchPlanets() {
             console.error(error);
         }
     }
-
 
     async function savePlanetsToStorage(pageNum) {
         try {

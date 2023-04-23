@@ -5,35 +5,39 @@ import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const { userItems, saveUsersToStorage, currentPage, currentPageData, alreadyLoadedPages } = useFetchUsers();
+const { userItems, saveUsersToStorage, currentPage: currentPageNo, currentPageData: newlyLoadedPageData, alreadyLoadedPages } = useFetchUsers();
 const { planetItems, savePlanetsToStorage } = useFetchPlanets();
 
+
+// 페이지 새로고침했을때 첫페이지 포함 이미 새로고침전에 로드됐었던 페이지 내용이 표시되지 않음 (스토리지에 데이터는 남아있음.)
 console.log(getAllUsers.value);
 console.log(getAllPlanets.value);
 
 const pageNums = [1,2,3,4,5,6,7,8,9];
-saveUsersToStorage(currentPage.value);
-// currentPageData.value = getAllUsers.value;
-console.log(currentPageData.value);
-alreadyLoadedPages.value.push(1);
+console.log("currentPageNo(first loading): ", currentPageNo.value[0])
+saveUsersToStorage(currentPageNo.value[0]);
+// newlyLoadedPageData.value = getAllUsers.value;
+console.log("currentPageData", newlyLoadedPageData.value);
+// alreadyLoadedPages.value.push(1);
 
 async function changeTableData(pageNum) {
     await saveUsersToStorage(pageNum);
-    console.log("users number:", currentPageData.value.length);
-    const users = currentPageData.value;
+    console.log("users number:", newlyLoadedPageData.value.length);
+    const users = newlyLoadedPageData.value;
     console.log("users: ", users);
     for (const [key, value] of Object.entries(users)) {
         if (userItems.includes(key)) {
             result.push(value);
         }
     }
-    console.log("currentPageData: ", currentPageData.value);
-    return currentPageData.value;
+    console.log("changed currentPageNo: ", currentPageNo.value);
+    console.log("Last newlyLoadedPageData: ", newlyLoadedPageData.value);
+    return newlyLoadedPageData.value;
 }
 
 function pageButtonClick(pageNum) {
-    currentPage.value = pageNum;
-    changeTableData(currentPage.value);
+    currentPageNo.value = pageNum;
+    changeTableData(currentPageNo.value);
 }
 
 </script>
@@ -50,8 +54,8 @@ function pageButtonClick(pageNum) {
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="user in currentPageData" class="border-solid border-2">
-                <td v-for="item in userItems">{{ user[item] }}</td>
+            <tr v-for="user in newlyLoadedPageData" class="border-solid border-2">
+                <td v-for="item in userItems" class="border-solid border-2">{{ user[item] }}</td>
             </tr>
         </tbody>
     </table>

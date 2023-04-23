@@ -1,11 +1,15 @@
 import { ref } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 const saveUsers = useLocalStorage('users', []);
 const savePlanets = useLocalStorage('planets', []);
+const saveLoadedPages = useLocalStorage('pages', []);
+const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
+const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
+const getLoadedPages = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 const alreadyLoadedPages = ref([]);
-const currentPage = ref([1]);
-const currentPageData = ref([]);
+const currentPageNo = ref([1]);
+const newlyLoadedPageData = ref([]);
 
 export function useFetchUsers() {
 
@@ -58,22 +62,30 @@ export function useFetchUsers() {
 
     async function saveUsersToStorage(pageNum) {
         try {
-            currentPage.value = pageNum;
-            if (!alreadyLoadedPages.value.includes(pageNum)) {
-                const users = [];
-                Object.values(await refineUsersDB(pageNum)).forEach(user => {
-                    saveUsers.value.push(user);
-                    users.push(user);
-                });
-                currentPageData.value = users;
-                alreadyLoadedPages.value.push(pageNum);
-            }
+            // currentPageNo.value = pageNum;
+
+            // if (!(pageNum === 1 && getAllUsers.value.length >= 10)) {
+
+                if (!saveLoadedPages.value.includes(pageNum)) {
+                    const users = [];
+                    Object.values(await refineUsersDB(pageNum)).forEach(user => {
+                        saveUsers.value.push(user);
+                        users.push(user);
+
+                    });
+                    newlyLoadedPageData.value = users;
+                    saveLoadedPages.value.push(pageNum);
+                }
+
+            // }
+            console.log("saveLoadedPages: ", saveLoadedPages.value);
+
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { currentPage, currentPageData, userItems, alreadyLoadedPages, saveUsersToStorage }
+    return { currentPage: currentPageNo, currentPageData: newlyLoadedPageData, userItems, alreadyLoadedPages, saveUsersToStorage }
 }
 
 
@@ -113,7 +125,7 @@ export function useFetchPlanets() {
 
     async function savePlanetsToStorage(pageNum) {
         try {
-            currentPage.value = pageNum;
+            currentPageNo.value = pageNum;
             if (!alreadyLoadedPages.value.includes(pageNum)) {
                 Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
                     savePlanets.value.push(planet);

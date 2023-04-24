@@ -68,10 +68,6 @@ export function useFetchUsers() {
                 saveUsers.value.push({[pageNum]: users});
                 newlyLoadedPageData.value = {[pageNum]: users};
             }
-        
-            console.log("saved result in saveUsersToStorage: ", getAllUsers.value);
-            console.log("Object.keys(getAllUsers.value): ", Object.keys(Object.values(getAllUsers.value)[pageNum]));
-
 
         } catch (error) {
             console.error(error);
@@ -124,7 +120,6 @@ export function useFetchPlanets() {
 
     async function savePlanetsToStorage(pageNum) {
         try {
-            // currentPageNo.value = pageNum;
             if (!Object.keys(savePlanets.value).includes(pageNum)) {
                 Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
                     savePlanets.value.push(planet);

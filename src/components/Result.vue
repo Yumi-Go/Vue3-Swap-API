@@ -8,7 +8,7 @@ const { allPlanets, planetItems, savePlanetsToStorage } = useFetchPlanets();
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
 async function initialize() {
-    saveUsersToStorage(currentPageNo.value);
+    await saveUsersToStorage(currentPageNo.value);
     console.log("allUsers: ", Object.values(allUsers.value));
 
 }

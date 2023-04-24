@@ -3,12 +3,10 @@ import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 const saveUsers = useLocalStorage('users', []);
 const savePlanets = useLocalStorage('planets', []);
-const saveLoadedPages = useLocalStorage('pages', []);
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 const getLoadedPages = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
-const alreadyLoadedPages = ref([]);
-const currentPageNo = ref([1]);
+const currentPageNo = ref(1);
 const newlyLoadedPageData = ref([]);
 
 export function useFetchUsers() {
@@ -62,30 +60,31 @@ export function useFetchUsers() {
 
     async function saveUsersToStorage(pageNum) {
         try {
-            // currentPageNo.value = pageNum;
+            if (getAllUsers.value.length < 1 || !(Object.keys(Object.values(getAllUsers.value)).includes(pageNum))) {
+                const users = [];
+                Object.values(await refineUsersDB(pageNum)).forEach(user => {
+                    users.push(user);
+                });
+                saveUsers.value.push({[pageNum]: users});
+                newlyLoadedPageData.value = {[pageNum]: users};
+            }
+        
+            console.log("saved result in saveUsersToStorage: ", getAllUsers.value);
+            console.log("Object.keys(getAllUsers.value): ", Object.keys(Object.values(getAllUsers.value)[pageNum]));
 
-            // if (!(pageNum === 1 && getAllUsers.value.length >= 10)) {
-
-                if (!saveLoadedPages.value.includes(pageNum)) {
-                    const users = [];
-                    Object.values(await refineUsersDB(pageNum)).forEach(user => {
-                        saveUsers.value.push(user);
-                        users.push(user);
-
-                    });
-                    newlyLoadedPageData.value = users;
-                    saveLoadedPages.value.push(pageNum);
-                }
-
-            // }
-            console.log("saveLoadedPages: ", saveLoadedPages.value);
 
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { currentPage: currentPageNo, currentPageData: newlyLoadedPageData, userItems, alreadyLoadedPages, saveUsersToStorage }
+    async function getPageNums() {
+
+    }
+
+
+
+    return { currentPageNo, newlyLoadedPageData, userItems, saveUsersToStorage, getPageNums }
 }
 
 
@@ -125,12 +124,11 @@ export function useFetchPlanets() {
 
     async function savePlanetsToStorage(pageNum) {
         try {
-            currentPageNo.value = pageNum;
-            if (!alreadyLoadedPages.value.includes(pageNum)) {
+            // currentPageNo.value = pageNum;
+            if (!Object.keys(savePlanets.value).includes(pageNum)) {
                 Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
                     savePlanets.value.push(planet);
                 });
-                alreadyLoadedPages.value.push(pageNum);
             }
         } catch (error) {
             console.error(error);

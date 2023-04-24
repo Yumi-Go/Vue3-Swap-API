@@ -2,23 +2,28 @@
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
+const { userItems, saveUsersToStorage, currentPageNo, newlyLoadedPageData, getPageNums } = useFetchUsers();
+const { planetItems, savePlanetsToStorage } = useFetchPlanets();
+
 const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
 const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
-const { userItems, saveUsersToStorage, currentPage: currentPageNo, currentPageData: newlyLoadedPageData, alreadyLoadedPages } = useFetchUsers();
-const { planetItems, savePlanetsToStorage } = useFetchPlanets();
+// getPageNums();
+const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
+
+async function initialize() {
+    console.log("currentPageNo(first loading): ", currentPageNo.value)
+    await saveUsersToStorage(currentPageNo.value);
+
+}
+
+initialize();
 
 
-// 페이지 새로고침했을때 첫페이지 포함 이미 새로고침전에 로드됐었던 페이지 내용이 표시되지 않음 (스토리지에 데이터는 남아있음.)
 console.log(getAllUsers.value);
 console.log(getAllPlanets.value);
 
-const pageNums = [1,2,3,4,5,6,7,8,9];
-console.log("currentPageNo(first loading): ", currentPageNo.value[0])
-saveUsersToStorage(currentPageNo.value[0]);
-// newlyLoadedPageData.value = getAllUsers.value;
-console.log("currentPageData", newlyLoadedPageData.value);
-// alreadyLoadedPages.value.push(1);
+
 
 async function changeTableData(pageNum) {
     await saveUsersToStorage(pageNum);
@@ -47,15 +52,15 @@ function pageButtonClick(pageNum) {
 
 <div class="">
 
-    <table class="w-[600px] table-auto border-solid border-2">
+    <table v-if="getAllUsers.length > 0" class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
                 <th v-for="column in userItems" class="border-solid border-2">{{ column }}</th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="user in newlyLoadedPageData" class="border-solid border-2">
-                <td v-for="item in userItems" class="border-solid border-2">{{ user[item] }}</td>
+            <tr v-for="(user, key, index) in Object.values(getAllUsers[currentPageNo-1])[0]" :key="index" class="border-solid border-2">
+                <td v-for="column in userItems" class="border-solid border-2">{{ user[column] }}</td>
             </tr>
         </tbody>
     </table>
@@ -63,6 +68,7 @@ function pageButtonClick(pageNum) {
 
 <div class="flex flex-row">
     <div v-for="pNum in pageNums">
+        <!-- should be changed to radio buttons -->
         <button
         @click="pageButtonClick(pNum)"
         class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none 

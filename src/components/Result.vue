@@ -1,22 +1,21 @@
 <script setup>
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+const { allUsers, userItems, saveUsersToStorage, currentPageNo, newlyLoadedPageData, getPageNums } = useFetchUsers();
+const { allPlanets, planetItems, savePlanetsToStorage } = useFetchPlanets();
 
-const { userItems, saveUsersToStorage, currentPageNo, newlyLoadedPageData, getPageNums } = useFetchUsers();
-const { planetItems, savePlanetsToStorage } = useFetchPlanets();
-
-const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
-const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
 
 // getPageNums();
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
 async function initialize() {
-    await saveUsersToStorage(currentPageNo.value);
+    saveUsersToStorage(currentPageNo.value);
+    console.log("allUsers: ", Object.values(allUsers.value));
 
 }
 
 initialize();
+
+
 
 async function changeTableData(pageNum) {
     await saveUsersToStorage(pageNum);
@@ -26,7 +25,6 @@ async function changeTableData(pageNum) {
             result.push(value);
         }
     }
-
     return newlyLoadedPageData.value;
 }
 
@@ -41,16 +39,15 @@ function pageButtonClick(pageNum) {
 <template>
 
 <div class="">
-
-    <table v-if="getAllUsers.length > 0" class="w-[600px] table-auto border-solid border-2">
+    <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
                 <th v-for="column in userItems" class="border-solid border-2">{{ column }}</th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(user, key, index) in Object.values(getAllUsers[currentPageNo-1])[0]" :key="index" class="border-solid border-2">
-                <td v-for="column in userItems" class="border-solid border-2">{{ user[column] }}</td>
+            <tr v-for="(users, key, index) in Object.values(allUsers)" :key="index" class="border-solid border-2">
+                <td v-for="column in userItems" class="border-solid border-2">{{ users[currentPageNo][column] }}</td>
             </tr>
         </tbody>
     </table>

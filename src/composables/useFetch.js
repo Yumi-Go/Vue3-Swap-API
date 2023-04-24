@@ -1,11 +1,7 @@
 import { ref } from 'vue';
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
-const saveUsers = useLocalStorage('users', []);
-const savePlanets = useLocalStorage('planets', []);
-const getAllUsers = useLocalStorage("users", null, { serializer: StorageSerializers.object });
-const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
-const getLoadedPages = useLocalStorage("planets", null, { serializer: StorageSerializers.object });
+const allUsers = ref([]);
+const allPlanets = ref([]);
 const currentPageNo = ref(1);
 const newlyLoadedPageData = ref([]);
 
@@ -60,13 +56,15 @@ export function useFetchUsers() {
 
     async function saveUsersToStorage(pageNum) {
         try {
-            if (getAllUsers.value.length < 1 || !(Object.keys(Object.values(getAllUsers.value)).includes(pageNum))) {
+            if (allUsers.value.length < 1 || !(Object.keys(Object.values(allUsers.value)).includes(pageNum))) {
                 const users = [];
                 Object.values(await refineUsersDB(pageNum)).forEach(user => {
                     users.push(user);
                 });
-                saveUsers.value.push({[pageNum]: users});
+                allUsers.value.push({[pageNum]: users});
                 newlyLoadedPageData.value = {[pageNum]: users};
+                console.log("allUsers in saveUsersToStorage: ", Object.values(allUsers.value));
+                console.log("newlyLoadedPageData: ", newlyLoadedPageData.value)
             }
 
         } catch (error) {
@@ -78,9 +76,7 @@ export function useFetchUsers() {
 
     }
 
-
-
-    return { currentPageNo, newlyLoadedPageData, userItems, saveUsersToStorage, getPageNums }
+    return { allUsers, allPlanets, currentPageNo, newlyLoadedPageData, userItems, saveUsersToStorage, getPageNums }
 }
 
 
@@ -120,9 +116,9 @@ export function useFetchPlanets() {
 
     async function savePlanetsToStorage(pageNum) {
         try {
-            if (!Object.keys(savePlanets.value).includes(pageNum)) {
+            if (!Object.keys(allPlanets.value).includes(pageNum)) {
                 Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
-                    savePlanets.value.push(planet);
+                    allPlanets.value.push(planet);
                 });
             }
         } catch (error) {

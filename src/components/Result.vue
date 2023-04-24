@@ -12,31 +12,21 @@ const getAllPlanets = useLocalStorage("planets", null, { serializer: StorageSeri
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
 async function initialize() {
-    console.log("currentPageNo(first loading): ", currentPageNo.value)
     await saveUsersToStorage(currentPageNo.value);
 
 }
 
 initialize();
 
-
-console.log(getAllUsers.value);
-console.log(getAllPlanets.value);
-
-
-
 async function changeTableData(pageNum) {
     await saveUsersToStorage(pageNum);
-    console.log("users number:", newlyLoadedPageData.value.length);
     const users = newlyLoadedPageData.value;
-    console.log("users: ", users);
     for (const [key, value] of Object.entries(users)) {
         if (userItems.includes(key)) {
             result.push(value);
         }
     }
-    console.log("changed currentPageNo: ", currentPageNo.value);
-    console.log("Last newlyLoadedPageData: ", newlyLoadedPageData.value);
+
     return newlyLoadedPageData.value;
 }
 

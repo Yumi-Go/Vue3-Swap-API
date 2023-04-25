@@ -2,7 +2,6 @@
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
 import { useButtons } from "../composables/usePageButtons.js";
 const { allUsers, userItems, saveUsersToStorage, currentPageNo, getPageNums } = useFetchUsers();
-const { allPlanets, planetItems, savePlanetsToStorage } = useFetchPlanets();
 const { currentPageBtn, pageStatus } = useButtons();
 
 // getPageNums();
@@ -54,9 +53,7 @@ function pageButtonClick(pageNum) {
         >
             {{ pNum }}
         </button>
-
     </div>
-
 </div>
 
 </template>

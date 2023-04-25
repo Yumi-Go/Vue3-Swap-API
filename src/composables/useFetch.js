@@ -22,6 +22,7 @@ export function useFetchUsers() {
         try {
             const response = await fetch(planetURL);
             const jsonData = await response.json();
+            console.log("jsonData.name: ", jsonData.name);
             return jsonData.name;
         } catch (error) {
             console.error(error);
@@ -41,7 +42,7 @@ export function useFetchUsers() {
                     if (key === "homeworld") {
                         getPlanetName(value)
                         .then(planet => {
-                            userRefinedData[key] = planet;
+                            userRefinedData['planet_name'] = planet;
                         });
                     }
                 }
@@ -90,36 +91,4 @@ export function useFetchPlanets() {
         }
     }
 
-    async function refinePlanetsDB(pageNum) {
-        try {
-            const pagePlanetsRefinedData = [];
-            const planetsRawData = await singlePagePlanets(pageNum);
-            planetsRawData.forEach(planet => {
-                const planetRefinedData = {};
-                for (const [key, value] of Object.entries(planet)) {
-                    if (planetItems.includes(key)) {
-                        planetRefinedData[key] = value;                    
-                    }
-                }
-                pagePlanetsRefinedData.push(planetRefinedData);
-            });
-            return pagePlanetsRefinedData;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async function savePlanetsToStorage(pageNum) {
-        try {
-            if (!Object.keys(allPlanets.value).includes(pageNum)) {
-                Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
-                    allPlanets.value.push(planet);
-                });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    return { planetItems, savePlanetsToStorage }
 }

@@ -55,9 +55,11 @@ export function useFetchUsers() {
 
     async function saveUsersToStorage(pageNum) {
         try {
+            const users = [];
             Object.values(await refineUsersDB(pageNum)).forEach(user => {
-                allUsers.value.push(user);
+                users.push(user);
             });
+            allUsers.value = users;
             console.log("allUsers in saveUsersToStorage: ", Object.values(allUsers.value));
 
         } catch (error) {

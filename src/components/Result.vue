@@ -1,15 +1,15 @@
 <script setup>
-import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
-const { allUsers, userItems, saveUsersToStorage, currentPageNo, getPageNums } = useFetchUsers();
+import { useFetchPeople, useFetchPlanets } from '../composables/useFetch';
+const { allPeople, personItems, savePeople, currentPageNo } = useFetchPeople();
+const { planetItems, savePlanets } = useFetchPlanets();
 
-// getPageNums();
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
-saveUsersToStorage(currentPageNo.value);
+savePeople(currentPageNo.value);
 
 function pageButtonClick(pageNum) {
     currentPageNo.value = pageNum;
-    saveUsersToStorage(currentPageNo.value);
+    savePeople(currentPageNo.value);
 }
 
 </script>
@@ -21,19 +21,18 @@ function pageButtonClick(pageNum) {
     <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
-                <th v-for="column in userItems" class="border-solid border-2">{{ column }}</th>
+                <th v-for="column in personItems" class="border-solid border-2">{{ column }}</th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(user, index) in allUsers" :key="index" class="border-solid border-2">
-                <td class="border-solid border-2">{{ user.name }}</td>
-                <td class="border-solid border-2">{{ user.height }}</td>
-                <td class="border-solid border-2">{{ user.mass }}</td>
-                <td class="border-solid border-2">{{ user.created }}</td>
-                <td class="border-solid border-2">{{ user.edited }}</td>
-                <td class="border-solid border-2">{{ user.planet_name }}</td>
+            <tr v-for="(person, index) in allPeople" :key="index" class="border-solid border-2">
+                <td class="border-solid border-2">{{ person.name }}</td>
+                <td class="border-solid border-2">{{ person.height }}</td>
+                <td class="border-solid border-2">{{ person.mass }}</td>
+                <td class="border-solid border-2">{{ person.created }}</td>
+                <td class="border-solid border-2">{{ person.edited }}</td>
+                <td class="border-solid border-2">{{ person.planet_name }}</td>
             </tr>
-
         </tbody>
     </table>
 </div>

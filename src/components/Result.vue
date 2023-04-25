@@ -1,15 +1,23 @@
 <script setup>
-import { useFetchPeople, useFetchPlanets } from '../composables/useFetch';
-const { allPeople, personItems, savePeople, currentPageNo } = useFetchPeople();
-const { planetItems, savePlanets } = useFetchPlanets();
+import { useFetchPeople } from '../composables/useFetch';
+const { allPeople, allPlanets, currentPageNo, planets, personItems, savePeople } = useFetchPeople();
 
-const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
+const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be removed later
 
 savePeople(currentPageNo.value);
 
 function pageButtonClick(pageNum) {
     currentPageNo.value = pageNum;
     savePeople(currentPageNo.value);
+}
+
+function planetNameClick(personIndex) {
+    planets.value.forEach(url => {
+
+        
+    });
+
+
 }
 
 </script>
@@ -31,7 +39,7 @@ function pageButtonClick(pageNum) {
                 <td class="border-solid border-2">{{ person.mass }}</td>
                 <td class="border-solid border-2">{{ person.created }}</td>
                 <td class="border-solid border-2">{{ person.edited }}</td>
-                <td class="border-solid border-2">{{ person.planet_name }}</td>
+                <td class="border-solid border-2"><span @click="planetNameClick(index)">{{ person.planet_name }}</span></td>
             </tr>
         </tbody>
     </table>

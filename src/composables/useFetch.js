@@ -19,11 +19,17 @@ export function useFetchPeople() {
         }
     }
 
-    async function getPlanetName(planetURL) {
+    async function getPlanetForEachPerson(planetURL) {
         try {
             const response = await fetch(planetURL);
             const jsonData = await response.json();
-            return jsonData.name;
+            const planet = {};
+            planet['name'] = jsonData.name;
+            planet['diameter'] = jsonData.diameter;
+            planet['climate'] = jsonData.climate;
+            planet['population'] = jsonData.population;
+            planets.value.push(planet);
+            return planet;
         } catch (error) {
             console.error(error);
         }
@@ -40,12 +46,16 @@ export function useFetchPeople() {
                         personRefinedData[key] = value;                    
                     }
                     if (key === "homeworld") {
-                        getPlanetName(value)
+                        // const planetNo = value.split("/planets/")[1].split("/")[0];
+                        // planetUrls.value.push(value);
+                        getPlanetForEachPerson(value)
                         .then(planet => {
-                            personRefinedData['planet_name'] = planet;
+                            personRefinedData['planet_name'] = planet.name;
                         });
                     }
                 }
+                console.log("planets: ", planets.value);
+
                 eachPagePeopleRefinedData.push(personRefinedData);
             });
             return eachPagePeopleRefinedData;
@@ -61,61 +71,11 @@ export function useFetchPeople() {
                 people.push(person);
             });
             allPeople.value = people;
+            console.log("allPeople: ", allPeople.value);
         } catch (error) {
             console.error(error);
         }
     }
 
-    return { allPeople, allPlanets, currentPageNo, personItems, savePeople }
-}
-
-
-export function useFetchPlanets() {
-
-    const planetItems = ['name', 'diameter', 'climate', 'population'];
-
-    async function eachPlanet(planetNum) {
-        try {
-            const response = await fetch(`https://swapi.dev/api/planets/?page=${planetNum}`);
-            const jsonData = await response.json();
-            return jsonData.results;
-
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async function refinePlanetsDB(pageNum) {
-        try {
-            const pagePlanetsRefinedData = [];
-            const planetsRawData = await singlePagePlanets(pageNum);
-            planetsRawData.forEach(planet => {
-                const planetRefinedData = {};
-                for (const [key, value] of Object.entries(planet)) {
-                    if (planetItems.includes(key)) {
-                        planetRefinedData[key] = value;                    
-                    }
-                }
-                pagePlanetsRefinedData.push(planetRefinedData);
-            });
-            return pagePlanetsRefinedData;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async function savePlanets(pageNum) {
-        try {
-            if (!Object.keys(savePlanets.value).includes(pageNum)) {
-                Object.values(await refinePlanetsDB(pageNum)).forEach(planet => {
-                    savePlanets.value.push(planet);
-                });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    return { planetItems, savePlanets }
-
+    return { allPeople, allPlanets, currentPageNo, planets, personItems, savePeople }
 }

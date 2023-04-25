@@ -3,11 +3,10 @@ import { ref } from 'vue';
 const allUsers = ref([]);
 const allPlanets = ref([]);
 const currentPageNo = ref(1);
-const newlyLoadedPageData = ref([]);
 
 export function useFetchUsers() {
 
-    const userItems = ['name', 'height', 'mass', 'created', 'edited', 'planet name'];
+    const userItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
 
     async function singlePageUsers(pageNum) {
         try {
@@ -42,7 +41,7 @@ export function useFetchUsers() {
                     if (key === "homeworld") {
                         getPlanetName(value)
                         .then(planet => {
-                            userRefinedData[key] = planet; // this push is working but planet name is not shown in local storage
+                            userRefinedData[key] = planet;
                         });
                     }
                 }
@@ -56,16 +55,10 @@ export function useFetchUsers() {
 
     async function saveUsersToStorage(pageNum) {
         try {
-            if (allUsers.value.length < 1 || !(Object.keys(Object.values(allUsers.value)).includes(pageNum))) {
-                const users = [];
-                Object.values(await refineUsersDB(pageNum)).forEach(user => {
-                    users.push(user);
-                });
-                allUsers.value.push({[pageNum]: users});
-                newlyLoadedPageData.value = {[pageNum]: users};
-                console.log("allUsers in saveUsersToStorage: ", Object.values(allUsers.value));
-                console.log("newlyLoadedPageData: ", newlyLoadedPageData.value)
-            }
+            Object.values(await refineUsersDB(pageNum)).forEach(user => {
+                allUsers.value.push(user);
+            });
+            console.log("allUsers in saveUsersToStorage: ", Object.values(allUsers.value));
 
         } catch (error) {
             console.error(error);
@@ -76,7 +69,7 @@ export function useFetchUsers() {
 
     }
 
-    return { allUsers, allPlanets, currentPageNo, newlyLoadedPageData, userItems, saveUsersToStorage, getPageNums }
+    return { allUsers, allPlanets, currentPageNo, userItems, saveUsersToStorage, getPageNums }
 }
 
 

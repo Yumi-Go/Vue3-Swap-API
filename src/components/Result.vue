@@ -1,44 +1,27 @@
 <script setup>
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
-const { allUsers, userItems, saveUsersToStorage, currentPageNo, newlyLoadedPageData, getPageNums } = useFetchUsers();
+import { useButtons } from "../composables/usePageButtons.js";
+const { allUsers, userItems, saveUsersToStorage, currentPageNo, getPageNums } = useFetchUsers();
 const { allPlanets, planetItems, savePlanetsToStorage } = useFetchPlanets();
-
+const { currentPageBtn, pageStatus } = useButtons();
 
 // getPageNums();
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
-async function initialize() {
-    await saveUsersToStorage(currentPageNo.value);
-    console.log("allUsers: ", Object.values(allUsers.value));
-
-}
-
-initialize();
-
-
-
-async function changeTableData(pageNum) {
-    await saveUsersToStorage(pageNum);
-    const users = newlyLoadedPageData.value;
-    for (const [key, value] of Object.entries(users)) {
-        if (userItems.includes(key)) {
-            result.push(value);
-        }
-    }
-    return newlyLoadedPageData.value;
-}
+saveUsersToStorage(currentPageNo.value);
+console.log("allUsers: ", allUsers.value);
 
 function pageButtonClick(pageNum) {
     currentPageNo.value = pageNum;
-    changeTableData(currentPageNo.value);
+    saveUsersToStorage(currentPageNo.value);
 }
 
 </script>
 
-
 <template>
 
 <div class="">
+
     <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
@@ -46,9 +29,15 @@ function pageButtonClick(pageNum) {
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(users, key, index) in Object.values(allUsers)" :key="index" class="border-solid border-2">
-                <td v-for="column in userItems" class="border-solid border-2">{{ users[currentPageNo][column] }}</td>
+            <tr v-for="(user, index) in allUsers" :key="index" class="border-solid border-2">
+                <td class="border-solid border-2">{{ user.name }}</td>
+                <td class="border-solid border-2">{{ user.height }}</td>
+                <td class="border-solid border-2">{{ user.mass }}</td>
+                <td class="border-solid border-2">{{ user.created }}</td>
+                <td class="border-solid border-2">{{ user.edited }}</td>
+                <td class="border-solid border-2">{{ user.planet_name }}</td>
             </tr>
+
         </tbody>
     </table>
 </div>
@@ -67,12 +56,17 @@ function pageButtonClick(pageNum) {
         </button>
 
     </div>
+
 </div>
 
 </template>
 
-<style scoped>
-.list-group-item {
-    border-radius: 0;
+<style>
+
+.btn_clicked {
+  font-weight: bold;
+  background: #FFF3E0;
+  color: rgb(185 28 28);
 }
+
 </style>

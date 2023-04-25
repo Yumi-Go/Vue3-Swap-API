@@ -1,14 +1,11 @@
 <script setup>
 import { useFetchUsers, useFetchPlanets } from '../composables/useFetch';
-import { useButtons } from "../composables/usePageButtons.js";
 const { allUsers, userItems, saveUsersToStorage, currentPageNo, getPageNums } = useFetchUsers();
-const { currentPageBtn, pageStatus } = useButtons();
 
 // getPageNums();
 const pageNums = [1,2,3,4,5,6,7,8,9]; // this should be replaced with getPageNums()
 
 saveUsersToStorage(currentPageNo.value);
-console.log("allUsers: ", allUsers.value);
 
 function pageButtonClick(pageNum) {
     currentPageNo.value = pageNum;
@@ -43,7 +40,6 @@ function pageButtonClick(pageNum) {
 
 <div class="flex flex-row">
     <div v-for="pNum in pageNums">
-        <!-- should be changed to radio buttons -->
         <button
         @click="pageButtonClick(pNum)"
         class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none 

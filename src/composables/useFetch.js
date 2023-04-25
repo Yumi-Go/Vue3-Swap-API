@@ -22,7 +22,6 @@ export function useFetchUsers() {
         try {
             const response = await fetch(planetURL);
             const jsonData = await response.json();
-            console.log("jsonData.name: ", jsonData.name);
             return jsonData.name;
         } catch (error) {
             console.error(error);
@@ -61,8 +60,6 @@ export function useFetchUsers() {
                 users.push(user);
             });
             allUsers.value = users;
-            console.log("allUsers in saveUsersToStorage: ", Object.values(allUsers.value));
-
         } catch (error) {
             console.error(error);
         }

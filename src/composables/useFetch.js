@@ -53,14 +53,23 @@ export function useFetchPeople() {
             const peopleData = await Promise.all(peoplePromises)
             .catch(error => {
                 console.log("error", error);
-             });
-             console.log("peopleData: ", peopleData);
+            });
+            console.log("peopleData: ", peopleData);
 
-             const planetsData = await Promise.all(planetsPromises)
-             .catch(error => {
-                 console.log("error", error);
-              });
-             console.log("planetsData: ", planetsData);
+            const planetsData = await Promise.all(planetsPromises)
+            .catch(error => {
+                console.log("error", error);
+            });
+            console.log("planetsData: ", planetsData);
+
+
+            //  const allData = [...peopleData, ...planetsData];
+            const allData = {}
+            allData["people"] = peopleData;
+            allData["planets"] = planetsData;
+            console.log("allData: ", allData);
+
+            return allData;
 
         } catch (error) {
             console.log(error);
@@ -71,28 +80,6 @@ export function useFetchPeople() {
     return { fetchData }
 
 }
-
-
-    // async function fetchData() {
-    //     const url1 = 'https://example.com/api/data1';
-    //     const url2 = 'https://example.com/api/data2';
-        
-    //     const [data1, data2] = await Promise.all([
-    //         fetch(url1).then((res) => res.json()),
-    //         fetch(url2).then((res) => res.json())
-    //     ]);
-        
-    //     const mergedData = [...data1, ...data2];
-    //     return mergedData;
-    //     }
-        
-    //     fetchData()
-    //     .then((data) => console.log(data))
-    //     .catch((error) => console.error(error));
-    // }
-
-
-
 
 
 

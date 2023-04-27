@@ -9,73 +9,92 @@ export function useFetchPeople() {
 
     const personItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
 
-    async function eachPagePeople(pageNum) {
+    async function fetchData() {
         try {
-            const response = await fetch(`https://swapi.dev/api/people/?page=${pageNum}`);
-            const jsonData = await response.json();
-            return jsonData.results;
-        } catch (error) {
-            console.error(error);
-        }
-    }
+            const peopleUrls = [];
+            for (let i = 1; i < 84; i++) {
+                const url = `https://swapi.dev/api/people/${i}`;
+                peopleUrls.push(url);
+            }
+            const planetsUrls = [];
+            for (let i = 1; i < 61; i++) {
+                const url = `https://swapi.dev/api/planets/${i}`;
+                planetsUrls.push(url);
+            }
 
-    async function getPlanetForEachPerson(planetURL) {
-        try {
-            const response = await fetch(planetURL);
-            const jsonData = await response.json();
-            const planet = {};
-            planet['name'] = jsonData.name;
-            planet['diameter'] = jsonData.diameter;
-            planet['climate'] = jsonData.climate;
-            planet['population'] = jsonData.population;
-            planets.value.push(planet);
-            return planet;
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
-    async function refinePeopleDB(pageNum) {
-        try {
-            const eachPagePeopleRefinedData = [];
-            const eachPagePeopleRawData = await eachPagePeople(pageNum);
-            eachPagePeopleRawData.forEach(person => {
-                const personRefinedData = {};
-                for (const [key, value] of Object.entries(person)) {
-                    if (personItems.includes(key)) {
-                        personRefinedData[key] = value;                    
+            const peoplePromises = [];
+            for (let i = 0; i < peopleUrls.length; i++) {
+                var promise = [];
+                await fetch(peopleUrls[i])
+                .then(res => {
+                    if (res.status !== 404) {
+                        promise = res.json();
+                        peoplePromises.push(promise);
                     }
-                    if (key === "homeworld") {
-                        // const planetNo = value.split("/planets/")[1].split("/")[0];
-                        // planetUrls.value.push(value);
-                        getPlanetForEachPerson(value)
-                        .then(planet => {
-                            personRefinedData['planet_name'] = planet.name;
-                        });
+                });
+            }
+            console.log("peoplePromises: ", peoplePromises);
+
+            const planetsPromises = [];
+            for (let i = 0; i < planetsUrls.length; i++) {
+                var promise = [];
+                await fetch(planetsUrls[i])
+                .then(res => {
+                    if (res.status !== 404) {
+                        promise = res.json();
+                        planetsPromises.push(promise);
                     }
-                }
-                console.log("planets: ", planets.value);
+                });
+            }
+            console.log("planetsPromises: ", planetsPromises);
 
-                eachPagePeopleRefinedData.push(personRefinedData);
-            });
-            return eachPagePeopleRefinedData;
+
+            const peopleData = await Promise.all(peoplePromises)
+            .catch(error => {
+                console.log("error", error);
+             });
+             console.log("peopleData: ", peopleData);
+
+             const planetsData = await Promise.all(planetsPromises)
+             .catch(error => {
+                 console.log("error", error);
+              });
+             console.log("planetsData: ", planetsData);
+
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
+    
 
-    async function savePeople(pageNum) {
-        try {
-            const people = [];
-            Object.values(await refinePeopleDB(pageNum)).forEach(person => {
-                people.push(person);
-            });
-            allPeople.value = people;
-            console.log("allPeople: ", allPeople.value);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    return { fetchData }
 
-    return { allPeople, allPlanets, currentPageNo, planets, personItems, savePeople }
 }
+
+
+    // async function fetchData() {
+    //     const url1 = 'https://example.com/api/data1';
+    //     const url2 = 'https://example.com/api/data2';
+        
+    //     const [data1, data2] = await Promise.all([
+    //         fetch(url1).then((res) => res.json()),
+    //         fetch(url2).then((res) => res.json())
+    //     ]);
+        
+    //     const mergedData = [...data1, ...data2];
+    //     return mergedData;
+    //     }
+        
+    //     fetchData()
+    //     .then((data) => console.log(data))
+    //     .catch((error) => console.error(error));
+    // }
+
+
+
+
+
+
+
+

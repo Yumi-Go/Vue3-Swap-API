@@ -1,11 +1,6 @@
 import { ref } from 'vue';
 
-const allPeople = ref([]);
-const allPlanets = ref([]);
-const currentPageNo = ref(1);
-const planets = ref([]);
-
-export function useFetchPeople() {
+export function useFetchData() {
 
     const personItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
 
@@ -76,7 +71,6 @@ export function useFetchPeople() {
         }
     }
     
-
     return { fetchData }
 
 }

@@ -7,7 +7,7 @@ const { fetchData } = useFetchData();
 const allData = ref([]);
 const people = ref([]);
 const planets = ref([]);
-const personItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
+const personItems = ['No', 'Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
 
 onBeforeMount(async () => {
     allData.value = await fetchData();
@@ -22,7 +22,7 @@ onBeforeMount(async () => {
 <template>
 <div class="">
     {{ people }}
-<!-- <table class="w-[600px] table-auto border-solid border-2">
+<table class="w-[600px] table-auto border-solid border-2">
     <thead class="border-solid border-2">
         <tr class="border-solid border-2">
             <th v-for="column in personItems" class="border-solid border-2">{{ column }}</th>
@@ -30,16 +30,17 @@ onBeforeMount(async () => {
     </thead>
     <tbody class="border-solid border-2">
         <tr v-for="(person, index) in people" :key="index" class="border-solid border-2">
+            <td class="border-solid border-2">{{ index + 1 }}</td>
             <td class="border-solid border-2">{{ person.name }}</td>
-                <td class="border-solid border-2">{{ person.height }}</td>
-                <td class="border-solid border-2">{{ person.mass }}</td>
-                <td class="border-solid border-2">{{ person.created }}</td>
-                <td class="border-solid border-2">{{ person.edited }}</td>
-                <td class="border-solid border-2"><span @click="">{{ person.homeworld }}</span></td>
+            <td class="border-solid border-2">{{ person.height }}</td>
+            <td class="border-solid border-2">{{ person.mass }}</td>
+            <td class="border-solid border-2">{{ person.created }}</td>
+            <td class="border-solid border-2">{{ person.edited }}</td>
+            <td class="border-solid border-2"><span @click="">{{ person.homeworld }}</span></td>
 
         </tr>
     </tbody>
-</table> -->
+</table>
 </div>
 
 <div class="flex flex-row">

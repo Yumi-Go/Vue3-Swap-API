@@ -21,8 +21,8 @@ onBeforeMount(async () => {
 
 <template>
 <div class="">
-    <!-- {{ people }} -->
-<table class="w-[600px] table-auto border-solid border-2">
+    {{ people }}
+<!-- <table class="w-[600px] table-auto border-solid border-2">
     <thead class="border-solid border-2">
         <tr class="border-solid border-2">
             <th v-for="column in personItems" class="border-solid border-2">{{ column }}</th>
@@ -39,7 +39,7 @@ onBeforeMount(async () => {
 
         </tr>
     </tbody>
-</table>
+</table> -->
 </div>
 
 <div class="flex flex-row">

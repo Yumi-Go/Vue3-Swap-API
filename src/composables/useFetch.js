@@ -54,7 +54,7 @@ export function useFetchData() {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(personData => {
                         peopleData.push(personData);
-                        console.log("el: ", personData);
+                        console.log("personData: ", personData);
                     });
                 });
             })
@@ -69,7 +69,7 @@ export function useFetchData() {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(planetData => {
                         planetsData.push(planetData);
-                        console.log("el: ", planetData);
+                        console.log("planetData: ", planetData);
                     });
                 });
             })
@@ -91,8 +91,50 @@ export function useFetchData() {
             console.log(error);
         }
     }
+
+
+    async function refineData() {
+        const allData = await fetchData();
+        const refinedData = [];
+        allData.people.forEach(person => {
+            const personRefinedData = {};
+            for (const [key, value] of Object.entries(person)) {
+                if (personItems.includes(key)) {
+                    personRefinedData[key] = value;
+                }
+                if (key === "homeworld") {
+                    // const planetNo = value.split("/planets/")[1].split("/")[0];
+                    allData.planets.forEach(planet => {
+                        if (planet.url === value) {
+                            personRefinedData['name'] = planet.name;
+                            personRefinedData['diameter'] = planet.diameter;
+                            personRefinedData['climate'] = planet.climate;
+                            personRefinedData['population'] = planet.population;
+                        }
+                    });
+
+               }
+            }
+
+            refinedData.push(personRefinedData);
+        });
+        console.log("refinedData: ", refinedData);
+
+
+
+        
+
+    }
+
+
+
+
+
+
+
+
     
-    return { fetchData }
+    return { fetchData, refineData }
 
 }
 

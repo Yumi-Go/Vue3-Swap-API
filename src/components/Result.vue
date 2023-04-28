@@ -2,12 +2,14 @@
 
 import { onBeforeMount, ref } from 'vue'
 import { useFetchData } from '../composables/useFetch';
-const { fetchData } = useFetchData();
+const { fetchData, refineData } = useFetchData();
 
 const allData = ref([]);
 const people = ref([]);
 const planets = ref([]);
 const personItems = ['No', 'Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
+
+
 
 onBeforeMount(async () => {
     allData.value = await fetchData();
@@ -15,6 +17,8 @@ onBeforeMount(async () => {
     planets.value = allData.value["planets"];
     console.log("people: ", people.value);
     console.log("planets: ", planets.value);
+    await refineData();
+
 });
 
 </script>

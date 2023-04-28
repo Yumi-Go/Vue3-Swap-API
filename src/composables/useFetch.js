@@ -2,6 +2,10 @@ import { ref } from 'vue';
 
 export function useFetchData() {
 
+
+    const peopleData = ref([]);
+    const planetsData = ref([]);
+
     const personItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
 
     async function fetchData() {
@@ -47,45 +51,50 @@ export function useFetchData() {
             }
             console.log("planetsPromises: ", planetsPromises);
 
-
-            let peopleData = [];
             await Promise.all(peoplePromises)
             .then(allPageData => {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(personData => {
-                        peopleData.push(personData);
-                        console.log("personData: ", personData);
+                        peopleData.value.push(personData);
                     });
                 });
             })
             .catch(error => {
                 console.log("error", error);
             });
-            console.log("peopleData: ", peopleData);
 
-            let planetsData = [];
+            console.log("peopleData: ", peopleData.value);
+
             await Promise.all(planetsPromises)
             .then(allPageData => {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(planetData => {
-                        planetsData.push(planetData);
-                        console.log("planetData: ", planetData);
+                        planetsData.value.push(planetData);
                     });
                 });
             })
             .catch(error => {
                 console.log("error", error);
             });
-            console.log("planetsData: ", planetsData);
+            console.log("planetsData: ", planetsData.value);
 
 
-            //  const allData = [...peopleData, ...planetsData];
-            const allData = {}
-            allData["people"] = peopleData;
-            allData["planets"] = planetsData;
-            console.log("allData: ", allData);
+            const refinedData = [];
+            peopleData.value.forEach(person => {
+                const personRefinedData = {};
+                for (const [key, value] of Object.entries(person)) {
+                    if (personItems.includes(key)) {
+                        personRefinedData[key] = value;                    
+                    }
+                    if (key === "homeworld") {
+                        personRefinedData[key] = getHomeworld(value);
+                    }
+                }
+                refinedData.push(personRefinedData);
+            });            
+            console.log("refinedData: ", refinedData);
 
-            return allData;
+            return refinedData;
 
         } catch (error) {
             console.log(error);
@@ -93,48 +102,25 @@ export function useFetchData() {
     }
 
 
-    async function refineData() {
-        const allData = await fetchData();
-        const refinedData = [];
-        allData.people.forEach(person => {
-            const personRefinedData = {};
-            for (const [key, value] of Object.entries(person)) {
-                if (personItems.includes(key)) {
-                    personRefinedData[key] = value;
+    function getHomeworld(planetUrl) {
+        try {
+            const homeworld = {};
+            planetsData.value.forEach(planet => {
+                if (planet.url === planetUrl) {
+                    homeworld['name'] = planet.name;
+                    homeworld['diameter'] = planet.diameter;
+                    homeworld['climate'] = planet.climate;
+                    homeworld['population'] = planet.population;
                 }
-                if (key === "homeworld") {
-                    // const planetNo = value.split("/planets/")[1].split("/")[0];
-                    allData.planets.forEach(planet => {
-                        if (planet.url === value) {
-                            personRefinedData['name'] = planet.name;
-                            personRefinedData['diameter'] = planet.diameter;
-                            personRefinedData['climate'] = planet.climate;
-                            personRefinedData['population'] = planet.population;
-                        }
-                    });
-
-               }
-            }
-
-            refinedData.push(personRefinedData);
-        });
-        console.log("refinedData: ", refinedData);
-
-
-
-        
+            });
+            return homeworld;
+        } catch (error) {
+            console.error(error);
+        }        
 
     }
 
-
-
-
-
-
-
-
-    
-    return { fetchData, refineData }
+    return { fetchData }
 
 }
 

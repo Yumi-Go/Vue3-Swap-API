@@ -2,22 +2,15 @@
 
 import { onBeforeMount, ref } from 'vue'
 import { useFetchData } from '../composables/useFetch';
-const { fetchData, refineData } = useFetchData();
+const { fetchData } = useFetchData();
 
 const allData = ref([]);
-const people = ref([]);
-const planets = ref([]);
+
 const personItems = ['No', 'Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
-
-
 
 onBeforeMount(async () => {
     allData.value = await fetchData();
-    people.value = allData.value["people"];
-    planets.value = allData.value["planets"];
-    console.log("people: ", people.value);
-    console.log("planets: ", planets.value);
-    await refineData();
+    console.log("allData: ", allData.value);
 
 });
 
@@ -25,7 +18,6 @@ onBeforeMount(async () => {
 
 <template>
 <div class="">
-    {{ people }}
 <table class="w-[600px] table-auto border-solid border-2">
     <thead class="border-solid border-2">
         <tr class="border-solid border-2">
@@ -33,14 +25,14 @@ onBeforeMount(async () => {
         </tr>
     </thead>
     <tbody class="border-solid border-2">
-        <tr v-for="(person, index) in people" :key="index" class="border-solid border-2">
+        <tr v-for="(person, index) in allData" :key="index" class="border-solid border-2">
             <td class="border-solid border-2">{{ index + 1 }}</td>
             <td class="border-solid border-2">{{ person.name }}</td>
             <td class="border-solid border-2">{{ person.height }}</td>
             <td class="border-solid border-2">{{ person.mass }}</td>
             <td class="border-solid border-2">{{ person.created }}</td>
             <td class="border-solid border-2">{{ person.edited }}</td>
-            <td class="border-solid border-2"><span @click="">{{ person.homeworld }}</span></td>
+            <td class="border-solid border-2"><span @click="">{{ person.homeworld.name }}</span></td>
 
         </tr>
     </tbody>

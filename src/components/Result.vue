@@ -21,12 +21,6 @@ const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
 
-const props = defineProps({
-    search: String
-});
-
-console.log("search in Result.vue: ", props.search);
-
 const { filterByName } = useSearch();
 
 onBeforeMount(async () => {
@@ -62,10 +56,20 @@ function sortTable(column) {
         allData.value.sort((a, b) => {
             console.log("a[column]: ", a[column]);
             console.log("b[column]: ", b[column]);
-            // if (typeof a[column] === 'string' && typeof b[column] === 'string') {
-            //     return a[column] - b[column];
-            // }
-            return standardizeToCompare(a[column]) - standardizeToCompare(b[column]);
+
+            if (column === 'planet_name') {
+                let planetNameA = a['homeworld'].name.toLowerCase();
+                let planetNameB = b['homeworld'].name.toLowerCase();
+                if (planetNameA === 'unknown') {
+                    planetNameA = 'zzzzzzzzzz'
+                }
+                if (planetNameB === 'unknown') {
+                    planetNameB = 'zzzzzzzzzz'
+                }
+                return (planetNameA < planetNameB) ? -1 : 1;
+            } else {
+                return standardizeToCompare(a[column]) - standardizeToCompare(b[column]);
+            }
         });
     } else {
         allData.value.reverse();

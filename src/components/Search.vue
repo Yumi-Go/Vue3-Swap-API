@@ -21,7 +21,7 @@ const { search } = useSearch();
             name="search"/>
         </div>
     </div>
-    <Result :search="search"/>
+    <Result/>
 </template>
 
 <style>

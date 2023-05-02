@@ -15,14 +15,12 @@ export function useFetchData() {
                 const url = `https://swapi.dev/api/people/?page=${pageNum}`;
                 peopleUrls.push(url);
             }
-            console.log("peopleUrls: ", peopleUrls);
 
             const planetsUrls = [];
             for (let pageNum = 1; pageNum < 7; pageNum++) {
                 const url = `https://swapi.dev/api/planets/?page=${pageNum}`;
                 planetsUrls.push(url);
             }
-            console.log("planetsUrls: ", planetsUrls);
 
 
             const peoplePromises = [];
@@ -36,7 +34,6 @@ export function useFetchData() {
                     }
                 });
             }
-            console.log("peoplePromises: ", peoplePromises);
 
             const planetsPromises = [];
             for (let i = 0; i < planetsUrls.length; i++) {
@@ -49,7 +46,6 @@ export function useFetchData() {
                     }
                 });
             }
-            console.log("planetsPromises: ", planetsPromises);
 
             await Promise.all(peoplePromises) // Question: I think I need to use Promise.all instead of Promise because peoplePromises contains multiple promises already
             .then(allPageData => {
@@ -63,7 +59,6 @@ export function useFetchData() {
                 console.log("error", error);
             });
 
-            console.log("peopleData: ", peopleData.value);
 
             await Promise.all(planetsPromises) // Question: I think I need to use Promise.all instead of Promise because planetsPromises contains multiple promises already
             .then(allPageData => {
@@ -76,7 +71,6 @@ export function useFetchData() {
             .catch(error => {
                 console.log("error", error);
             });
-            console.log("planetsData: ", planetsData.value);
 
 
             const refinedData = [];
@@ -92,7 +86,6 @@ export function useFetchData() {
                 }
                 refinedData.push(personRefinedData);
             });
-            console.log("refinedData: ", refinedData);
 
             return refinedData;
 
@@ -116,7 +109,7 @@ export function useFetchData() {
             return homeworld;
         } catch (error) {
             console.error(error);
-        }        
+        }
 
     }
 

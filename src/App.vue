@@ -1,6 +1,6 @@
 <script setup>
 import Search from './components/Search.vue';
-import Result from './components/Result.vue';
+// import Result from './components/Result.vue';
 </script>
 
 <template>

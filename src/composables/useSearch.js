@@ -8,7 +8,6 @@ export function useSearch() {
         const result = Object.values(objects).filter(obj => 
             obj['name'].toLowerCase().match(search.value.toLowerCase())
         );
-        console.log("reslut: ", result);
         return result;
     }
     return { search, filterByName }

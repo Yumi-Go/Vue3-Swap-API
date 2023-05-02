@@ -2,17 +2,32 @@
 
 import { onBeforeMount, onMounted, ref } from 'vue'
 import { useFetchData } from '../composables/useFetch';
+import { useSearch } from '../composables/useSearch';
+
 import PlanetPopup from './PlanetPopup.vue';
 
 const { personItems, fetchData } = useFetchData();
 const allData = ref([]);
-const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
+
+function capitalizeColumnNames(name) {
+    const firstLetter = name[0].toUpperCase();
+    const rest = name.slice(1);
+    return firstLetter + rest;
+}
 
 const isModalOpened = ref(false);
 const planetName = ref('');
 const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
+
+const props = defineProps({
+    search: String
+});
+
+console.log("search in Result.vue: ", props.search);
+
+const { filterByName } = useSearch();
 
 onBeforeMount(async () => {
     allData.value = await fetchData();
@@ -33,8 +48,11 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
 
 let prevColumn = "nothing";
 
-function changeUnknown(value){
-    if (value === 'unknown') return 0;
+function standardizeToCompare(value){
+    if (value === 'unknown') return -1;
+    if (value.includes(',')) {
+        return value.replace(",", "");
+    }
     else return value;
 }
 
@@ -44,7 +62,10 @@ function sortTable(column) {
         allData.value.sort((a, b) => {
             console.log("a[column]: ", a[column]);
             console.log("b[column]: ", b[column]);
-            return changeUnknown(a[column]) - changeUnknown(b[column]);
+            // if (typeof a[column] === 'string' && typeof b[column] === 'string') {
+            //     return a[column] - b[column];
+            // }
+            return standardizeToCompare(a[column]) - standardizeToCompare(b[column]);
         });
     } else {
         allData.value.reverse();
@@ -73,14 +94,14 @@ function sortTable(column) {
                 v-for="column in personItems"
                 @click="sortTable(column)"
                 class="border-solid border-2 cursor-pointer">
-                {{ column }}
+                {{ capitalizeColumnNames(column) }}
             </th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(person, index) in allData" :key="index" class="border-solid border-2">
+            <tr v-for="(person, index) in filterByName(allData)" :key="index" class="border-solid border-2">
                 <!-- <td class="border-solid border-2">{{ index + 1 }}</td> -->
-                <td class="border-solid border-2">{{ person.name }}</td>
+                <td class="border-solid border-2">{{ index+1 }}. {{ person.name }}</td>
                 <td class="border-solid border-2">{{ person.height }}</td>
                 <td class="border-solid border-2">{{ person.mass }}</td>
                 <td class="border-solid border-2">{{ person.created }}</td>

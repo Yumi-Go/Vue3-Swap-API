@@ -7,7 +7,7 @@ import Result from './components/Result.vue';
   <div class="">
     <h1>Star Wars Application</h1>
     <Search/>
-    <Result/>
+    <!-- <Result/> -->
   </div>
 </template>
 

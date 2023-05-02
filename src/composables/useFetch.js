@@ -2,7 +2,6 @@ import { ref } from 'vue';
 
 export function useFetchData() {
 
-
     const peopleData = ref([]);
     const planetsData = ref([]);
 
@@ -86,7 +85,6 @@ export function useFetchData() {
                 }
                 refinedData.push(personRefinedData);
             });
-
             return refinedData;
 
         } catch (error) {
@@ -116,8 +114,3 @@ export function useFetchData() {
     return { personItems, fetchData }
 
 }
-
-
-
-
-

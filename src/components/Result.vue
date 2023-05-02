@@ -1,32 +1,27 @@
 <script setup>
 
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useFetchData } from '../composables/useFetch';
 import { useSearch } from '../composables/useSearch';
-
+import { useSort } from '../composables/useSort';
 import PlanetPopup from './PlanetPopup.vue';
 
 const { personItems, fetchData } = useFetchData();
+const { filterByName } = useSearch();
+const { sortTable } = useSort();
+
 const allData = ref([]);
 
-function capitalizeColumnNames(name) {
-    const firstLetter = name[0].toUpperCase();
-    const rest = name.slice(1);
-    return firstLetter + rest;
-}
+onBeforeMount(async () => {
+    allData.value = await fetchData();
+    console.log("allData: ", allData.value);
+})
 
 const isModalOpened = ref(false);
 const planetName = ref('');
 const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
-
-const { filterByName } = useSearch();
-
-onBeforeMount(async () => {
-    allData.value = await fetchData();
-    console.log("allData: ", allData.value);
-})
 
 function closeModal() {
     isModalOpened.value = false;
@@ -40,41 +35,10 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     isModalOpened.value = true;
 }
 
-let prevColumn = "nothing";
-
-function standardizeToCompare(value){
-    if (value === 'unknown') return -1;
-    if (value.includes(',')) {
-        return value.replace(",", "");
-    }
-    else return value;
-}
-
-function sortTable(column) {
-    console.log("column: ", column);
-    if (column !== prevColumn) {
-        allData.value.sort((a, b) => {
-            console.log("a[column]: ", a[column]);
-            console.log("b[column]: ", b[column]);
-
-            if (column === 'planet_name') {
-                let planetNameA = a['homeworld'].name.toLowerCase();
-                let planetNameB = b['homeworld'].name.toLowerCase();
-                if (planetNameA === 'unknown') {
-                    planetNameA = 'zzzzzzzzzz'
-                }
-                if (planetNameB === 'unknown') {
-                    planetNameB = 'zzzzzzzzzz'
-                }
-                return (planetNameA < planetNameB) ? -1 : 1;
-            } else {
-                return standardizeToCompare(a[column]) - standardizeToCompare(b[column]);
-            }
-        });
-    } else {
-        allData.value.reverse();
-    }
-    prevColumn = column;
+function capitalizeColumnNames(name) {
+    const firstLetter = name[0].toUpperCase();
+    const rest = name.slice(1);
+    return firstLetter + rest;
 }
 
 </script>
@@ -96,7 +60,7 @@ function sortTable(column) {
             <tr class="border-solid border-2">
                 <th
                 v-for="column in personItems"
-                @click="sortTable(column)"
+                @click="sortTable(allData, column)"
                 class="border-solid border-2 cursor-pointer">
                 {{ capitalizeColumnNames(column) }}
             </th>

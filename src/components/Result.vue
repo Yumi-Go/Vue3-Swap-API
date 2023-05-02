@@ -4,9 +4,9 @@ import { onBeforeMount, onMounted, ref } from 'vue'
 import { useFetchData } from '../composables/useFetch';
 import PlanetPopup from './PlanetPopup.vue';
 
-const { fetchData } = useFetchData();
+const { personItems, fetchData } = useFetchData();
 const allData = ref([]);
-const personItems = ['No', 'Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
+const columnNames = ['Name', 'Height', 'Mass', 'Created', 'Edited', 'Planet Name'];
 
 const isModalOpened = ref(false);
 const planetName = ref('');
@@ -31,6 +31,20 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     isModalOpened.value = true;
 }
 
+let prevColumn = "nothing";
+function sortTable(column) {
+    console.log("column: ", column);
+    if (column !== prevColumn) {
+        allData.value.sort((a, b) => {
+            console.log("a[column]: ", a[column]);
+            console.log("b[column]: ", b[column]);
+            return a[column] - b[column];
+        });
+    } else {
+        allData.value.reverse();
+    }
+    prevColumn = column;
+}
 
 </script>
 
@@ -48,12 +62,17 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     <table class="w-[600px] table-auto border-solid border-2">
         <thead class="border-solid border-2">
             <tr class="border-solid border-2">
-                <th v-for="column in personItems" class="border-solid border-2">{{ column }}</th>
+                <th
+                v-for="column in personItems"
+                @click="sortTable(column)"
+                class="border-solid border-2 cursor-pointer">
+                {{ column }}
+            </th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
             <tr v-for="(person, index) in allData" :key="index" class="border-solid border-2">
-                <td class="border-solid border-2">{{ index + 1 }}</td>
+                <!-- <td class="border-solid border-2">{{ index + 1 }}</td> -->
                 <td class="border-solid border-2">{{ person.name }}</td>
                 <td class="border-solid border-2">{{ person.height }}</td>
                 <td class="border-solid border-2">{{ person.mass }}</td>

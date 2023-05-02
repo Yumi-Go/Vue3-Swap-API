@@ -51,7 +51,7 @@ export function useFetchData() {
             }
             console.log("planetsPromises: ", planetsPromises);
 
-            await Promise.all(peoplePromises)
+            await Promise.all(peoplePromises) // Question: I think I need to use Promise.all instead of Promise because peoplePromises contains multiple promises already
             .then(allPageData => {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(personData => {
@@ -65,7 +65,7 @@ export function useFetchData() {
 
             console.log("peopleData: ", peopleData.value);
 
-            await Promise.all(planetsPromises)
+            await Promise.all(planetsPromises) // Question: I think I need to use Promise.all instead of Promise because planetsPromises contains multiple promises already
             .then(allPageData => {
                 allPageData.forEach(eachPageData => {
                     eachPageData.results.forEach(planetData => {
@@ -91,7 +91,7 @@ export function useFetchData() {
                     }
                 }
                 refinedData.push(personRefinedData);
-            });            
+            });
             console.log("refinedData: ", refinedData);
 
             return refinedData;
@@ -120,7 +120,7 @@ export function useFetchData() {
 
     }
 
-    return { fetchData }
+    return { personItems, fetchData }
 
 }
 

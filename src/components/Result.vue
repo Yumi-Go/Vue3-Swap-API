@@ -5,17 +5,18 @@ import { useFetchData } from '../composables/useFetch';
 import { useSearch } from '../composables/useSearch';
 import { useSort } from '../composables/useSort';
 import PlanetPopup from './PlanetPopup.vue';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 const { personItems, fetchData } = useFetchData();
-const { filterByName } = useSearch();
-const { sortTable } = useSort();
-
-const allData = ref([]);
 
 onBeforeMount(async () => {
-    allData.value = await fetchData();
-    console.log("allData: ", allData.value);
+    await fetchData();
 })
+
+const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+
+const { filterByName } = useSearch();
+const { sortTable } = useSort();
 
 const isModalOpened = ref(false);
 const planetName = ref('');
@@ -60,15 +61,14 @@ function capitalizeColumnNames(name) {
             <tr class="border-solid border-2">
                 <th
                 v-for="column in personItems"
-                @click="sortTable(allData, column)"
+                @click="sortTable(getData, column)"
                 class="border-solid border-2 cursor-pointer">
                 {{ capitalizeColumnNames(column) }}
             </th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(person, index) in filterByName(allData)" :key="index" class="border-solid border-2">
-                <!-- <td class="border-solid border-2">{{ index + 1 }}</td> -->
+            <tr v-for="(person, index) in filterByName(getData)" :key="index" class="border-solid border-2">
                 <td class="border-solid border-2">{{ index+1 }}. {{ person.name }}</td>
                 <td class="border-solid border-2">{{ person.height }}</td>
                 <td class="border-solid border-2">{{ person.mass }}</td>

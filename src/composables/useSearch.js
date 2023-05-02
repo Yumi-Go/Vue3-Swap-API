@@ -4,10 +4,8 @@ const search = ref('');
 
 export function useSearch() {
     
-    function filterByName(objects) {
-        const result = objects.filter(obj => 
-            obj['name'].toLowerCase().match(search.value.toLowerCase())
-        );
+    function filterByName(allData) {
+        const result = allData.filter(obj => obj['name'].toLowerCase().match(search.value.toLowerCase()));
         return result;
     }
     return { search, filterByName }

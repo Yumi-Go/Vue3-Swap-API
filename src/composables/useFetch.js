@@ -1,4 +1,9 @@
 import { ref } from 'vue';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+
+const storeData = useLocalStorage('all', []);
+const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+
 
 export function useFetchData() {
 
@@ -85,7 +90,8 @@ export function useFetchData() {
                 }
                 refinedData.push(personRefinedData);
             });
-            return refinedData;
+            storeAllPeopleData(refinedData);
+            // return refinedData;
 
         } catch (error) {
             console.log(error);
@@ -110,6 +116,13 @@ export function useFetchData() {
         }
 
     }
+
+    function storeAllPeopleData(data) {
+        if (getData.value.length < 1) {
+            data.forEach(e => storeData.value.push(e));
+        }
+    }
+
 
     return { personItems, fetchData }
 

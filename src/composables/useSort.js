@@ -11,7 +11,6 @@ export function useSort() {
     }
     
     function sortTable(objects, column) {
-        console.log("column: ", column);
         if (column !== prevColumn) {
             objects.sort((a, b) => {
                 if (column === 'planet_name') {

@@ -33,18 +33,6 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
 
 let prevColumn = "nothing";
 
-// function sortTable(column) {
-//     console.log("column: ", column);
-//     if (column !== prevColumn) {
-//         let num = allData.value.filter((el) => typeof el[column] === "number").sort((a, b) => a[column] - b[column]);
-//         let str = allData.value.filter((el) => typeof el[column] === "string").sort();
-//         return num.concat(str);
-//     } else {
-//         allData.value.reverse();
-//     }
-//     prevColumn = column;
-// }
-
 function changeUnknown(value){
     if (value === 'unknown') return 0;
     else return value;
@@ -64,32 +52,8 @@ function sortTable(column) {
     prevColumn = column;
 }
 
-
-
-// function sortTable(column) {
-//     console.log("column: ", column);
-//     if (column !== prevColumn) {
-//         allData.value.sort((a, b) => {
-//             console.log("a[column]: ", a[column]);
-//             console.log("b[column]: ", b[column]);
-//             if (typeof a[column] === 'number' && typeof b[column] === 'number') {
-//                 return a[column] - b[column];
-//             }
-//             if (typeof a[column] === 'number' && typeof b[column] === 'string') {
-//                 return -1;
-//             }
-//             if (typeof a[column] === 'string' && typeof b[column] === 'string') {
-//                 return (a[column] < b[column]) ? -1 : 1;
-//             }
-//             return 0;
-//         });
-//     } else {
-//         allData.value.reverse();
-//     }
-//     prevColumn = column;
-// }
-
 </script>
+
 
 <template>
 

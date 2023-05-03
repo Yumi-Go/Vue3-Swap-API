@@ -46,13 +46,9 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     isModalOpened.value = true;
 }
 
-function capitalizeColumnNames(name) {
-    if (name.includes('_')) {
-        const wordsInName = [];
-        name.split("_").map(el => {
-            wordsInName.push(el[0].toUpperCase() + el.slice(1));
-        })
-        return wordsInName.join(" ");
+function convertColumnNames(name) {
+    if (name === 'homeworld') {
+        return 'Planet Name';
     }
     const firstLetter = name[0].toUpperCase();
     const rest = name.slice(1);
@@ -83,7 +79,7 @@ function capitalizeColumnNames(name) {
                     <th scope="col"
                     @click="sortTable(searchResult, column)"
                     class="cursor-move">
-                        <span class="cursor-pointer">{{ capitalizeColumnNames(column) }}</span>
+                        <span class="cursor-pointer">{{ convertColumnNames(column) }}</span>
                     </th>
                 </template>
             </draggable>
@@ -91,17 +87,15 @@ function capitalizeColumnNames(name) {
         <tbody class="border-solid border-2">
             <tr v-for="(person, index) in searchResult" :key="index"
             class="border-solid border-2 bg-white shadow cursor-move">
-                <td class="">{{ person.name }}</td>
-                <td class="">{{ person.height }}</td>
-                <td class="">{{ person.mass }}</td>
-                <td class="">{{ person.created }}</td>
-                <td class="">{{ person.edited }}</td>
-                <td class="">
-                    <button
-                    @click="openModal(person.homeworld.name, person.homeworld.diameter, person.homeworld.climate, person.homeworld.population)"
-                    class="cursor-pointer">
-                        {{ person.homeworld.name }}
-                    </button>
+                <td v-for="column in personItems">
+                    <span v-if="column !== 'homeworld'" class="">{{ person[column] }}</span>
+                    <span v-else class="">
+                        <button
+                        @click="openModal(person[column]['name'], person[column]['diameter'], person[column]['climate'], person[column]['population'])"
+                        class="cursor-pointer">
+                            {{ person[column]['name'] }}
+                        </button>
+                    </span>
                 </td>
             </tr>
         </tbody>

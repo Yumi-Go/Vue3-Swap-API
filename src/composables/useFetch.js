@@ -10,7 +10,7 @@ export function useFetchData() {
     const peopleData = ref([]);
     const planetsData = ref([]);
 
-    const personItems = ['name', 'height', 'mass', 'created', 'edited', 'planet_name'];
+    const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld'];
 
     async function fetchData() {
         try {
@@ -82,11 +82,13 @@ export function useFetchData() {
                 const personRefinedData = {};
                 for (const [key, value] of Object.entries(person)) {
                     if (personItems.includes(key)) {
-                        personRefinedData[key] = value;                    
+                        if (key === "homeworld") {
+                            personRefinedData[key] = getHomeworld(value);
+                        } else {
+                            personRefinedData[key] = value;
+                        }                    
                     }
-                    if (key === "homeworld") {
-                        personRefinedData[key] = getHomeworld(value);
-                    }
+
                 }
                 refinedData.push(personRefinedData);
             });

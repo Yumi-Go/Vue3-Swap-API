@@ -19,11 +19,10 @@ export function useSort() {
         if (column !== prevColumn) {
             console.log("objects in useSort.js: ", objects);
             console.log("column in useSort.js: ", column);
-
             objects.sort((a, b) => {
-                if (column === 'planet_name') {
-                    let planetNameA = a['homeworld'].name.toLowerCase();
-                    let planetNameB = b['homeworld'].name.toLowerCase();
+                if (column === 'homeworld') {
+                    let planetNameA = a[column].name.toLowerCase();
+                    let planetNameB = b[column].name.toLowerCase();
                     if (planetNameA === 'unknown') {
                         planetNameA = 'zzzzzzzzzz'
                     }
@@ -39,7 +38,6 @@ export function useSort() {
             });
         } else {
             objects.reverse();
-            // console.log("reversed");
         }
         prevColumn = column;
         console.log("objects result: ", objects);

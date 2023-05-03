@@ -1,22 +1,29 @@
 <script setup>
 
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue';
 import { useFetchData } from '../composables/useFetch';
 import { useSearch } from '../composables/useSearch';
 import { useSort } from '../composables/useSort';
 import PlanetPopup from './PlanetPopup.vue';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+// import Draggable from 'vue3-draggable';
+import draggable from 'vuedraggable';
 
 const { personItems, fetchData } = useFetchData();
+const { result, filterByName } = useSearch();
+const { sortTable } = useSort();
+
+
+const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+console.log("getData: ", getData.value);
 
 onBeforeMount(async () => {
     await fetchData();
+    filterByName(getData.value);
+    console.log("result inside onBeforeMount: ", result.value);
 })
 
-const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
-
-const { filterByName } = useSearch();
-const { sortTable } = useSort();
+console.log("result outside onBeforeMount: ", result.value);
 
 const isModalOpened = ref(false);
 const planetName = ref('');
@@ -56,25 +63,31 @@ function capitalizeColumnNames(name) {
     :planetPopulation="planetPopulation"
     @closeModal="closeModal"/>
 
-    <table class="w-[600px] table-auto border-solid border-2">
-        <thead class="border-solid border-2">
+    <table class="w-[1000px] table-auto">
+        <thead class="">
             <tr class="border-solid border-2">
                 <th
                 v-for="column in personItems"
                 @click="sortTable(getData, column)"
-                class="border-solid border-2 cursor-pointer">
+                class="cursor-pointer">
                 {{ capitalizeColumnNames(column) }}
             </th>
             </tr>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(person, index) in filterByName(getData)" :key="index" class="border-solid border-2">
-                <td class="border-solid border-2">{{ index+1 }}. {{ person.name }}</td>
-                <td class="border-solid border-2">{{ person.height }}</td>
-                <td class="border-solid border-2">{{ person.mass }}</td>
-                <td class="border-solid border-2">{{ person.created }}</td>
-                <td class="border-solid border-2">{{ person.edited }}</td>
-                <td class="border-solid border-2">
+            <draggable v-model="result" tag="tr">
+                <template #item="{ person }">
+
+            <!-- <tr v-for="person in filterByName(getData)" :key="index"
+            id="draggableRow"
+            class="border-solid border-2 bg-white shadow cursor-move"
+            draggable="true"> -->
+                <td class="">{{ person.name }}</td>
+                <td class="">{{ person.height }}</td>
+                <td class="">{{ person.mass }}</td>
+                <td class="">{{ person.created }}</td>
+                <td class="">{{ person.edited }}</td>
+                <td class="">
                     <button
                     @click="openModal(person.homeworld.name, person.homeworld.diameter, person.homeworld.climate, person.homeworld.population)"
                     class="cursor-pointer">
@@ -82,7 +95,9 @@ function capitalizeColumnNames(name) {
                     </button>
                 </td>
 
-            </tr>
+            <!-- </tr> -->
+            </template>
+        </draggable>
         </tbody>
     </table>
 </div>

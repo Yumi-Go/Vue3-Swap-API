@@ -1,3 +1,7 @@
+import { ref } from "vue";
+
+const sortResult = ref([]);
+
 export function useSort() {
     
     let prevColumn = "nothing";
@@ -11,7 +15,11 @@ export function useSort() {
     }
     
     function sortTable(objects, column) {
+        console.log("prevColumn: ", prevColumn);
         if (column !== prevColumn) {
+            console.log("objects in useSort.js: ", objects);
+            console.log("column in useSort.js: ", column);
+
             objects.sort((a, b) => {
                 if (column === 'planet_name') {
                     let planetNameA = a['homeworld'].name.toLowerCase();
@@ -23,15 +31,22 @@ export function useSort() {
                         planetNameB = 'zzzzzzzzzz'
                     }
                     return (planetNameA < planetNameB) ? -1 : 1;
-                } else {
+                } else if (column === 'height' || column === 'mass') {
                     return standardizeToCompare(a[column]) - standardizeToCompare(b[column]);
+                } else {
+                    return (standardizeToCompare(a[column]) < standardizeToCompare(b[column])) ? -1 : 1;
                 }
             });
         } else {
             objects.reverse();
+            // console.log("reversed");
         }
         prevColumn = column;
+        console.log("objects result: ", objects);
+        sortResult.value = objects;
+        console.log("sortResult: ", sortResult.value);
+
     }
 
-    return { sortTable }
+    return { sortResult, sortTable }
 }

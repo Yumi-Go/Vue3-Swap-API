@@ -1,13 +1,13 @@
 import { ref } from "vue";
 
 const search = ref('');
-const result = ref([]);
+const searchResult = ref([]);
 
 export function useSearch() {
     
     function filterByName(allData) {
-        result.value = allData.filter(obj => obj['name'].toLowerCase().match(search.value.toLowerCase()));
-        return result;
+        searchResult.value = allData.filter(obj => obj['name'].toLowerCase().match(search.value.toLowerCase()));
+        // return searchResult;
     }
-    return { search, result, filterByName }
+    return { search, searchResult, filterByName }
 }

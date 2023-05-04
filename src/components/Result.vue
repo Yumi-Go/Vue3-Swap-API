@@ -6,7 +6,7 @@ import { useSearch } from '../composables/useSearch';
 import { useSort } from '../composables/useSort';
 import PlanetPopup from './PlanetPopup.vue';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
-import draggable from 'vuedraggable';
+import Draggable from 'vuedraggable';
 
 const { personItems, fetchData } = useFetchData();
 

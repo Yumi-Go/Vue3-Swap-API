@@ -74,10 +74,11 @@ function convertColumnNames(name) {
 
     <table class="w-[1000px] table-auto">
         <thead class="">
-            <draggable v-model="personItems" tag="tr" :item-key="key => key" @end="filterByName(getData)">
+            <draggable v-model="personItems" tag="tr" :item-key="key => key"
+                @end="filterByName(getData)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
-                    class="cursor-move">
+                    class="cursor-move rder-solid border-2">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="sortTable(searchResult, column)" class="pl-2 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-sort"/>
@@ -89,7 +90,7 @@ function convertColumnNames(name) {
         <tbody class="border-solid border-2">
             <tr v-for="(person, index) in searchResult" :key="index"
             class="border-solid border-2 bg-white shadow cursor-move">
-                <td v-for="column in personItems">
+                <td v-for="column in personItems" class="rder-solid border-2">
                     <span v-if="column !== 'homeworld'" class="">{{ person[column] }}</span>
                     <span v-else class="">
                         <button
@@ -109,3 +110,11 @@ function convertColumnNames(name) {
 </div>
 
 </template>
+
+
+<style>
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+</style>

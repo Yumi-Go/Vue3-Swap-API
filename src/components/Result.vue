@@ -51,6 +51,12 @@ function convertColumnNames(name) {
     return firstLetter + rest;
 }
 
+function convertDate(dateString) {
+    const date = new Date(dateString);
+    return date.toDateString();
+
+}
+
 </script>
 
 <template>
@@ -83,14 +89,15 @@ function convertColumnNames(name) {
             <tr v-for="(person, index) in sortResult" :key="index"
             class="border-solid border-2 bg-white shadow cursor-move">
                 <td v-for="column in personItems" class="border-solid border-2">
-                    <span v-if="column !== 'homeworld'" class="">{{ person[column] }}</span>
-                    <span v-else class="">
+                    <span v-if="column === 'homeworld'" class="">
                         <button
                         @click="openModal(person[column]['name'], person[column]['diameter'], person[column]['climate'], person[column]['population'])"
                         class="cursor-pointer">
                             {{ person[column]['name'] }}
                         </button>
                     </span>
+                    <span v-else-if="column === 'created' || column === 'edited'">{{ convertDate(person[column]) }}</span>
+                    <span v-else class="">{{ person[column] }}</span>
                 </td>
             </tr>
         </tbody>

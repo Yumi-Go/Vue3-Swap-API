@@ -1,6 +1,9 @@
 import { ref } from "vue";
+import { useSearch } from './useSearch';
 
-const sortResult = ref([]);
+const { searchResult } = useSearch();
+
+const sortResult = ref(searchResult);
 
 export function useSort() {
     
@@ -15,10 +18,7 @@ export function useSort() {
     }
     
     function sortTable(objects, column) {
-        console.log("prevColumn: ", prevColumn);
         if (column !== prevColumn) {
-            console.log("objects in useSort.js: ", objects);
-            console.log("column in useSort.js: ", column);
             objects.sort((a, b) => {
                 if (column === 'homeworld') {
                     let planetNameA = a[column].name.toLowerCase();
@@ -40,10 +40,7 @@ export function useSort() {
             objects.reverse();
         }
         prevColumn = column;
-        console.log("objects result: ", objects);
         sortResult.value = objects;
-        console.log("sortResult: ", sortResult.value);
-
     }
 
     return { sortResult, sortTable }

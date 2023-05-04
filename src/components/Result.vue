@@ -11,20 +11,15 @@ import draggable from 'vuedraggable';
 const { personItems, fetchData } = useFetchData();
 
 const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
-console.log("getData: ", getData.value);
-
 
 const { searchResult, search, filterByName } = useSearch();
 const { sortResult, sortTable } = useSort();
 
-
 onBeforeMount(async () => {
     await fetchData();
-    console.log("getData onBeforeMount: ", getData.value);
+    console.log("getData: ", getData.value);
     filterByName(getData.value);
 });
-
-console.log("searchResult: ", searchResult.value);
 
 const isModalOpened = ref(false);
 const planetName = ref('');
@@ -32,6 +27,7 @@ const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
 
+watch(search, () => filterByName(getData.value));
 watch(search, () => filterByName(getData.value));
 
 function closeModal() {
@@ -55,10 +51,7 @@ function convertColumnNames(name) {
     return firstLetter + rest;
 }
 
-
-
 </script>
-
 
 
 <template>
@@ -75,7 +68,7 @@ function convertColumnNames(name) {
     <table class="w-[1000px] table-auto">
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
-                @end="filterByName(getData)" ghost-class="ghost">
+                @end="filterByName(sortResult)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
                     class="cursor-move rder-solid border-2">
@@ -88,9 +81,9 @@ function convertColumnNames(name) {
             </draggable>
         </thead>
         <tbody class="border-solid border-2">
-            <tr v-for="(person, index) in searchResult" :key="index"
+            <tr v-for="(person, index) in sortResult" :key="index"
             class="border-solid border-2 bg-white shadow cursor-move">
-                <td v-for="column in personItems" class="rder-solid border-2">
+                <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column !== 'homeworld'" class="">{{ person[column] }}</span>
                     <span v-else class="">
                         <button

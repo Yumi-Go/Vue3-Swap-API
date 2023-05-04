@@ -53,7 +53,6 @@ function convertColumnNames(name) {
 
 </script>
 
-
 <template>
 
 <div class="">

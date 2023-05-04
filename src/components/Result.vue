@@ -51,11 +51,26 @@ function convertColumnNames(name) {
     return firstLetter + rest;
 }
 
-function convertDate(dateString) {
+function convertDateFormat(dateString) {
     const date = new Date(dateString);
     return date.toDateString();
-
 }
+
+function convertPopulationFormat(population) {
+    if (isNaN(population)) {
+        return '-';
+    }
+    return Number(population).toLocaleString();
+}
+
+function convertDiameterFormat(diameter) {
+    if (isNaN(diameter)) {
+        return '-';
+    }
+    return Number(diameter).toLocaleString()+' km';
+}
+
+
 
 </script>
 
@@ -91,12 +106,17 @@ function convertDate(dateString) {
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
                         <button
-                        @click="openModal(person[column]['name'], person[column]['diameter'], person[column]['climate'], person[column]['population'])"
+                        @click="openModal(
+                            person[column]['name'],
+                            convertDiameterFormat(person[column]['diameter']),
+                            person[column]['climate'],
+                            convertPopulationFormat(person[column]['population']))"
                         class="cursor-pointer">
                             {{ person[column]['name'] }}
                         </button>
                     </span>
-                    <span v-else-if="column === 'created' || column === 'edited'">{{ convertDate(person[column]) }}</span>
+                    <span v-else-if="column === 'created' || column === 'edited'">
+                        {{ convertDateFormat(person[column]) }}</span>
                     <span v-else class="">{{ person[column] }}</span>
                 </td>
             </tr>

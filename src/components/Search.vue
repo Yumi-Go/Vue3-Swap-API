@@ -1,6 +1,6 @@
 <script setup>
-import Result from './Result.vue'
-import { useSearch } from '../composables/useSearch';
+import Result from '/src/components/Result.vue'
+import { useSearch } from '/src/composables/useSearch';
 
 const { search } = useSearch();
 

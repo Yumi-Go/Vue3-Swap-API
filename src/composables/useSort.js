@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { useSearch } from './useSearch';
+import { useSearch } from '/src/composables/useSearch';
 
 const { searchResult } = useSearch();
 

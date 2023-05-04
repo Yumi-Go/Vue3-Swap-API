@@ -1,10 +1,10 @@
 <script setup>
 
 import { onBeforeMount, ref, watch } from 'vue';
-import { useFetchData } from '../composables/useFetch';
-import { useSearch } from '../composables/useSearch';
-import { useSort } from '../composables/useSort';
-import PlanetPopup from './PlanetPopup.vue';
+import { useFetchData } from '/src/composables/useFetch';
+import { useSearch } from '/src/composables/useSearch';
+import { useSort } from '/src/composables/useSort';
+import PlanetPopup from '/src/components/PlanetPopup.vue';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import Draggable from 'vuedraggable';
 

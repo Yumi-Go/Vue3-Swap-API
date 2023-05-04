@@ -74,12 +74,14 @@ function convertColumnNames(name) {
 
     <table class="w-[1000px] table-auto">
         <thead class="">
-            <draggable v-model="personItems" tag="tr" :item-key="key => key">
+            <draggable v-model="personItems" tag="tr" :item-key="key => key" @end="filterByName(getData)">
                 <template #item="{ element: column }">
                     <th scope="col"
-                    @click="sortTable(searchResult, column)"
                     class="cursor-move">
-                        <span class="cursor-pointer">{{ convertColumnNames(column) }}</span>
+                        <span class="">{{ convertColumnNames(column) }}</span>
+                        <span @click="sortTable(searchResult, column)" class="pl-2 cursor-pointer">
+                            <font-awesome-icon icon="fa-solid fa-sort"/>
+                        </span>
                     </th>
                 </template>
             </draggable>

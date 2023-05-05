@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { useSearch } from './useSearch';
 
 const { searchResult } = useSearch();
-const sortResult = ref(searchResult.value);
+const sortResult = ref(searchResult);
 
 export function useSort() {
     

@@ -13,7 +13,7 @@ const { personItems, fetchData } = useFetchData();
 
 const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
 
-const { searchResult, search, checkedColumns, filterByName } = useSearch();
+const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();
 const { convertColumnNames, convertDateFormat, convertPopulationFormat, convertDiameterFormat } = useFormat();
 
@@ -21,7 +21,9 @@ const { convertColumnNames, convertDateFormat, convertPopulationFormat, convertD
 onBeforeMount(async () => {
     await fetchData();
     console.log("getData: ", getData.value);
-    filterByName(getData.value);
+    filterByColumns(getData.value);
+    console.log("searchResult length in Result.vue: ", searchResult.value.length);
+    // searchResult.value = getData.value;
 });
 
 const isModalOpened = ref(false);
@@ -30,8 +32,8 @@ const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
 
-watch(search, () => filterByName(getData.value));
-watch(checkedColumns, () => filterByName(getData.value));
+watch(search, () => filterByColumns(getData.value));
+watch(checkedColumns, () => filterByColumns(getData.value));
 
 function closeModal() {
     isModalOpened.value = false;
@@ -61,7 +63,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     <table class="w-[1000px] table-auto">
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
-                @end="filterByName(sortResult)" ghost-class="ghost">
+                @end="filterByColumns(sortResult)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
                     class="cursor-move rder-solid border-2">
@@ -78,7 +80,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
             class="border-solid border-2 bg-white shadow">
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
-                        <button
+                        <!-- <button
                         @click="openModal(
                             person[column]['name'],
                             convertDiameterFormat(person[column]['diameter']),
@@ -86,7 +88,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
                             convertPopulationFormat(person[column]['population']))"
                         class="cursor-pointer">
                             {{ person[column]['name'] }}
-                        </button>
+                        </button> -->
                     </span>
                     <span v-else-if="column === 'created' || column === 'edited'">
                         {{ convertDateFormat(person[column]) }}</span>

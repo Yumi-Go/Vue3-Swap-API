@@ -1,8 +1,17 @@
 <script setup>
 import Result from './Result.vue'
-import { useSearch } from '../composables/useSearch';
+import { ref } from "vue";
+import { Button } from 'flowbite-vue'
 
-const { search } = useSearch();
+import { useSearch } from '../composables/useSearch';
+import { useFetchData } from '../composables/useFetch';
+import { useFormat } from '../composables/useFormat';
+
+const { search, checkedColumns } = useSearch();
+const { personItems } = useFetchData();
+const { convertColumnNames } = useFormat();
+
+// const checkedColumns = ref([]);
 
 </script>
 
@@ -23,11 +32,18 @@ const { search } = useSearch();
             </div>
         </div>
     </div>
+
+    <p>{{ checkedColumns }}</p>
+    <fieldset class="p-3 my-5 border-solid border-2 border-indigo-200">
+        <legend>Check the columns to be searched.</legend>
+        <label v-for="(column, index) in personItems" :key="index">
+            <input type="checkbox" :id="column" :name="column" :value="column" v-model="checkedColumns">
+            <span class="pl-2 mr-5">{{ convertColumnNames(column) }}</span>
+        </label>
+        <!-- <Button color="default" outline>search</Button> -->
+    </fieldset>
+
+
     <Result/>
+
 </template>
-
-<style>
-
-
-
-</style>

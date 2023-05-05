@@ -4,6 +4,7 @@ import { onBeforeMount, ref, watch } from 'vue';
 import { useFetchData } from '../composables/useFetch';
 import { useSearch } from '../composables/useSearch';
 import { useSort } from '../composables/useSort';
+import { useFormat } from '../composables/useFormat';
 import PlanetPopup from './PlanetPopup.vue';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import Draggable from 'vuedraggable';
@@ -12,8 +13,10 @@ const { personItems, fetchData } = useFetchData();
 
 const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
 
-const { searchResult, search, filterByName } = useSearch();
+const { searchResult, search, checkedColumns, filterByName } = useSearch();
 const { sortResult, sortTable } = useSort();
+const { convertColumnNames, convertDateFormat, convertPopulationFormat, convertDiameterFormat } = useFormat();
+
 
 onBeforeMount(async () => {
     await fetchData();
@@ -28,7 +31,7 @@ const planetClimate = ref('');
 const planetPopulation = ref('');
 
 watch(search, () => filterByName(getData.value));
-watch(search, () => filterByName(getData.value));
+watch(checkedColumns, () => filterByName(getData.value));
 
 function closeModal() {
     isModalOpened.value = false;
@@ -41,36 +44,6 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     planetPopulation.value = pPopulation;
     isModalOpened.value = true;
 }
-
-function convertColumnNames(name) {
-    if (name === 'homeworld') {
-        return 'Planet Name';
-    }
-    const firstLetter = name[0].toUpperCase();
-    const rest = name.slice(1);
-    return firstLetter + rest;
-}
-
-function convertDateFormat(dateString) {
-    const date = new Date(dateString);
-    return date.toDateString();
-}
-
-function convertPopulationFormat(population) {
-    if (isNaN(population)) {
-        return '-';
-    }
-    return Number(population).toLocaleString();
-}
-
-function convertDiameterFormat(diameter) {
-    if (isNaN(diameter)) {
-        return '-';
-    }
-    return Number(diameter).toLocaleString()+' km';
-}
-
-
 
 </script>
 
@@ -102,7 +75,7 @@ function convertDiameterFormat(diameter) {
         </thead>
         <tbody class="border-solid border-2">
             <tr v-for="(person, index) in sortResult" :key="index"
-            class="border-solid border-2 bg-white shadow cursor-move">
+            class="border-solid border-2 bg-white shadow">
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
                         <button

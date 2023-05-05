@@ -23,7 +23,6 @@ onBeforeMount(async () => {
     console.log("getData: ", getData.value);
     filterByColumns(getData.value);
     console.log("searchResult length in Result.vue: ", searchResult.value.length);
-    // searchResult.value = getData.value;
 });
 
 const isModalOpened = ref(false);

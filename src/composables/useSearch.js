@@ -5,13 +5,11 @@ const getData = useLocalStorage("all", null, { serializer: StorageSerializers.ob
 
 const search = ref('');
 const checkedColumns = ref([]);
-const searchResult = ref([]);
+const searchResult = ref(getData.value);
 
 export function useSearch() {
 
     function filterByColumns(allData) {
-        console.log("searchResult.value.length: ", searchResult.value.length);
-        console.log("checkedColumns.value.length: ", checkedColumns.value.length);
         
         if (checkedColumns.value.length < 1) {
             filterByName(allData);
@@ -44,7 +42,7 @@ export function useSearch() {
 
     function filterByName(allData) {
 
-        const result = allData.filter(obj => obj['name'].toLowerCase().match(search.value.toLowerCase()));
+        const result = allData.filter(obj => obj['name']?.toLowerCase().match(search.value.toLowerCase()));
         searchResult.value = result;
         console.log("searchResult after filterByName: ", searchResult.value);
 
@@ -52,35 +50,35 @@ export function useSearch() {
     }
 
     function filterByHeight(allData) {
-        const result = allData.filter(obj => obj['height'].match(search.value));
+        const result = allData.filter(obj => obj['height']?.match(search.value));
         searchResult.value = result;
         console.log("searchResult after filterByHeight: ", searchResult.value);
         return result;
     }
 
     function filterByMass(allData) {
-        const result = allData.filter(obj => obj['mass'].match(search.value));
+        const result = allData.filter(obj => obj['mass']?.match(search.value));
         searchResult.value = result;
         console.log("searchResult after filterByMass: ", searchResult.value);
         return result;
     }
 
     function filterByCreated(allData) {
-        const result = allData.filter(obj => obj['created'].toLowerCase().match(search.value));
+        const result = allData.filter(obj => obj['created']?.toLowerCase().match(search.value));
         searchResult.value = result;
         console.log("searchResult after filterByMass: ", searchResult.value);
         return result;
     }
 
     function filterByEdited(allData) {
-        const result = allData.filter(obj => obj['edited'].toLowerCase().match(search.value));
+        const result = allData.filter(obj => obj['edited']?.toLowerCase().match(search.value));
         searchResult.value = result;
         console.log("searchResult after filterByMass: ", searchResult.value);
         return result;
     }
 
     // function filterByPlanet(allData) {
-    //     const result = allData.filter(obj => obj['homeworld'].toLowerCase().match(search.value.toLowerCase()));
+    //     const result = allData.filter(obj => obj['homeworld']?.toLowerCase().match(search.value.toLowerCase()));
     //     searchResult.value = result;
     //     console.log("searchResult after filterByPlanet: ", searchResult.value);
     //     return result;

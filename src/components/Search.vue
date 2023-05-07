@@ -1,6 +1,6 @@
 <script setup>
 import Result from './Result.vue'
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Button } from 'flowbite-vue'
 
 import { useSearch } from '../composables/useSearch';
@@ -12,6 +12,9 @@ const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
 // const checkedColumns = ref([]);
+
+
+
 
 </script>
 

@@ -1,8 +1,10 @@
 import { ref } from "vue";
-import { useSearch } from './useSearch';
+// import { useSearch } from './useSearch';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
-const { searchResult } = useSearch();
-const sortResult = ref(searchResult);
+const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+// const { searchResult } = useSearch();
+const sortResult = ref([]);
 
 export function useSort() {
     
@@ -40,6 +42,8 @@ export function useSort() {
         }
         prevColumn = column;
         sortResult.value = objects;
+
+        // return sortResult.value;
     }
 
     return { sortResult, sortTable }

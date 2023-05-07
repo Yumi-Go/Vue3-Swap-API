@@ -17,13 +17,16 @@ const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();
 const { convertColumnNames, convertDateFormat, convertPopulationFormat, convertDiameterFormat } = useFormat();
 
+console.log("getData outside onBeforeMount: ", getData.value);
 
+const entireSortResult = ref([]);
 onBeforeMount(async () => {
     await fetchData();
     console.log("getData: ", getData.value);
     filterByColumns(getData.value);
-    console.log("searchResult length in Result.vue: ", searchResult.value.length);
+    entireSortResult.value = getData.value;
 });
+
 
 const isModalOpened = ref(false);
 const planetName = ref('');
@@ -31,8 +34,20 @@ const planetDiameter = ref('');
 const planetClimate = ref('');
 const planetPopulation = ref('');
 
-watch(search, () => filterByColumns(getData.value));
-watch(checkedColumns, () => filterByColumns(getData.value));
+watch(search, () => {
+    filterByColumns(entireSortResult.value);
+    sortResult.value = searchResult.value;
+});
+watch(checkedColumns, () => {
+    filterByColumns(entireSortResult.value);
+    sortResult.value = searchResult.value;
+});
+
+function holdEntireSortResult(column) {
+    sortTable(getData.value, column);
+    entireSortResult.value = sortResult.value;
+}
+
 
 function closeModal() {
     isModalOpened.value = false;
@@ -59,6 +74,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     :planetPopulation="planetPopulation"
     @closeModal="closeModal"/>
 
+    <p>search: {{ search }}</p>
     <table class="w-[1000px] table-auto">
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
@@ -67,7 +83,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
                     <th scope="col"
                     class="cursor-move rder-solid border-2">
                         <span class="">{{ convertColumnNames(column) }}</span>
-                        <span @click="sortTable(searchResult, column)" class="pl-2 cursor-pointer">
+                        <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-sort"/>
                         </span>
                     </th>

@@ -11,11 +11,6 @@ const { search, checkedColumns } = useSearch();
 const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
-// const checkedColumns = ref([]);
-
-
-
-
 </script>
 
 

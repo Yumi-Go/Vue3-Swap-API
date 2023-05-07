@@ -92,7 +92,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
             class="border-solid border-2 bg-white shadow">
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
-                        <!-- <button
+                        <button
                         @click="openModal(
                             person[column]['name'],
                             convertDiameterFormat(person[column]['diameter']),
@@ -100,7 +100,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
                             convertPopulationFormat(person[column]['population']))"
                         class="cursor-pointer">
                             {{ person[column]['name'] }}
-                        </button> -->
+                        </button>
                     </span>
                     <span v-else-if="column === 'created' || column === 'edited'">
                         {{ convertDateFormat(person[column]) }}</span>

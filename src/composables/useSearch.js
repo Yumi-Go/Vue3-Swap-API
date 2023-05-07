@@ -38,13 +38,15 @@ export function useSearch() {
                 } else {
                     // eachColumnResult = filterByPlanet(allData);
                 }
-                allColumnsResult.push(eachColumnResult);
+                eachColumnResult.forEach(person => allColumnsResult.push(person));
             });
-            searchResult.value = allColumnsResult;
-
             console.log("allColumnsResult in filterByColumns: ", allColumnsResult);
+            searchResult.value = allColumnsResult;
         }
         sortResult.value = searchResult.value;
+        console.log("searchResult after filter: ", searchResult.value);
+        console.log("sortResult after filter: ", sortResult.value);
+        // return searchResult.value;
 
     }
 

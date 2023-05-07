@@ -27,7 +27,6 @@ onBeforeMount(async () => {
     entireSortResult.value = getData.value;
 });
 
-
 const isModalOpened = ref(false);
 const planetName = ref('');
 const planetDiameter = ref('');
@@ -39,15 +38,13 @@ watch(search, () => {
     sortResult.value = searchResult.value;
 });
 watch(checkedColumns, () => {
-    filterByColumns(entireSortResult.value);
-    sortResult.value = searchResult.value;
+    sortResult.value = entireSortResult.value;
 });
 
 function holdEntireSortResult(column) {
     sortTable(getData.value, column);
     entireSortResult.value = sortResult.value;
 }
-
 
 function closeModal() {
     isModalOpened.value = false;

@@ -1,9 +1,7 @@
 import { ref } from "vue";
-// import { useSearch } from './useSearch';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
 const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
-// const { searchResult } = useSearch();
 const sortResult = ref([]);
 
 export function useSort() {

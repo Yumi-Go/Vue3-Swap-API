@@ -28,29 +28,19 @@ export function useFetchData() {
             await Promise.resolve(singlePagePeoplePromise)
             .then(singlePageData => {
                 if (singlePageData.previous !== null) {
-                    console.log("singlePageData.previous: ", singlePageData.previous);
                     isPrevPageExist.value = true;
-                    console.log("isPrevPageExist: ", isPrevPageExist.value);
                 } else {
                     isPrevPageExist.value = false;
                 }
                 if (singlePageData.next !== null) {
-                    console.log("singlePageData.next: ", singlePageData.next);
                     isNextPageExist.value = true;
-                    console.log("isNextPageExist: ", isNextPageExist.value);
                 } else {
                     isNextPageExist.value = false;
                 }
                 currentPageNo.value = pageNum;
-                console.log("pageNum: ", pageNum);
-                console.log("isPrevExist: ", isPrevPageExist.value);
-                console.log("isNextExist: ", isNextPageExist.value);
                 singlePageData.results.forEach(person => {
                     peopleData.value.push(person);
                 });
-                // singlePagePeople.results.forEach(person => {
-                //     peopleData.value.push(person);
-                // });
             })
             .catch(error => {
                 console.log("error", error);

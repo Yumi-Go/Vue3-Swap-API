@@ -60,6 +60,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
 async function pageButtonClick(pageNum) {
     await saveData(pageNum);
     filterByColumns(storeData.value);
+    entireSortResult.value = storeData.value;
 }
 
 
@@ -97,15 +98,14 @@ async function pageButtonClick(pageNum) {
             class="border-solid border-2 bg-white shadow">
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
-                        <button
+                        <label for="my-modal-4" class="cursor-pointer btn btn-ghost"
                         @click="openModal(
                             person[column]['name'],
                             convertDiameterFormat(person[column]['diameter']),
                             person[column]['climate'],
-                            convertPopulationFormat(person[column]['population']))"
-                        class="cursor-pointer">
+                            convertPopulationFormat(person[column]['population']))">
                             {{ person[column]['name'] }}
-                        </button>
+                        </label>
                     </span>
                     <span v-else-if="column === 'created' || column === 'edited'">
                         {{ convertDateFormat(person[column]) }}</span>

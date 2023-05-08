@@ -1,5 +1,4 @@
 <script setup>
-import { Button } from 'flowbite-vue'
 
 import { useSearch } from '../composables/useSearch';
 import { useFetchData } from '../composables/useFetch';

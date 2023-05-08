@@ -1,4 +1,6 @@
 <script setup>
+import { useFetchData } from '../composables/useFetch';
+const { currentPageNo, isPrevPageExist, isNextPageExist } = useFetchData();
 
 const props = defineProps({
 
@@ -9,8 +11,35 @@ const emit = defineEmits([
 ]);
 const pageNums = 9;
 
-function pageButtonClick(pNum) {
-    emit('pageButtonClick', pNum);
+function generateButtons(prev, next) {
+
+}
+
+function goPreviousPage(current) {
+    currentPageNo.value--;
+}
+
+function goNextPage(current) {
+    currentPageNo.value++;
+
+}
+
+// function pageButtonClick(pNum) {
+//     emit('pageButtonClick', pNum);
+// }
+
+function prevPageButtonClick() {
+    currentPageNo.value--;
+    console.log("current: ", currentPageNo.value);
+    console.log("prev: ", currentPageNo.value-1);
+    emit('pageButtonClick', currentPageNo.value);
+}
+
+function nextPageButtonClick() {
+    currentPageNo.value++;
+    console.log("current: ", currentPageNo.value);
+    console.log("next: ", currentPageNo.value+1);
+    emit('pageButtonClick', currentPageNo.value);
 }
 
 </script>
@@ -20,6 +49,14 @@ function pageButtonClick(pNum) {
 <template>
 
 <div class="flex flex-row justify-center">
+    <div class="btn-group">
+        <button v-if="isPrevPageExist" @click="prevPageButtonClick()" class="btn">«</button>
+        <button class="btn">Page {{ currentPageNo }}</button>
+        <button v-if="isNextPageExist" @click="nextPageButtonClick()" class="btn">»</button>
+    </div>
+</div>
+
+<!-- <div class="flex flex-row justify-center">
     <div v-for="pNum in pageNums" class="">
         <button
         @click="pageButtonClick(pNum)"
@@ -30,9 +67,8 @@ function pageButtonClick(pNum) {
         >
             {{ pNum }}
         </button>
-
     </div>
-</div>
+</div> -->
 
 
 </template>

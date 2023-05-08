@@ -4,6 +4,9 @@ import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 const storeData = useLocalStorage('all', []);
 const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
 const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld'];
+const currentPageNo = ref();
+const isPrevPageExist = ref(false);
+const isNextPageExist = ref(false);
 
 export function useFetchData() {
     const peopleData = ref([]);
@@ -23,10 +26,31 @@ export function useFetchData() {
             });
 
             await Promise.resolve(singlePagePeoplePromise)
-            .then(singlePagePeople => {
-                singlePagePeople.results.forEach(person => {
+            .then(singlePageData => {
+                if (singlePageData.previous !== null) {
+                    console.log("singlePageData.previous: ", singlePageData.previous);
+                    isPrevPageExist.value = true;
+                    console.log("isPrevPageExist: ", isPrevPageExist.value);
+                } else {
+                    isPrevPageExist.value = false;
+                }
+                if (singlePageData.next !== null) {
+                    console.log("singlePageData.next: ", singlePageData.next);
+                    isNextPageExist.value = true;
+                    console.log("isNextPageExist: ", isNextPageExist.value);
+                } else {
+                    isNextPageExist.value = false;
+                }
+                currentPageNo.value = pageNum;
+                console.log("pageNum: ", pageNum);
+                console.log("isPrevExist: ", isPrevPageExist.value);
+                console.log("isNextExist: ", isNextPageExist.value);
+                singlePageData.results.forEach(person => {
                     peopleData.value.push(person);
                 });
+                // singlePagePeople.results.forEach(person => {
+                //     peopleData.value.push(person);
+                // });
             })
             .catch(error => {
                 console.log("error", error);
@@ -123,6 +147,7 @@ export function useFetchData() {
 
     async function saveData(pageNum) {
         try {
+            currentPageNo.value = pageNum;
             storeData.value = [];
             const people = [];
             await refineData(pageNum);
@@ -135,6 +160,6 @@ export function useFetchData() {
         }
     }
 
-    return { personItems, saveData }
+    return { currentPageNo, isPrevPageExist, isNextPageExist, personItems, saveData }
 
 }

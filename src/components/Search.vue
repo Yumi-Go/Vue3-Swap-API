@@ -1,6 +1,4 @@
 <script setup>
-import Result from './Result.vue'
-import { ref, watch } from "vue";
 import { Button } from 'flowbite-vue'
 
 import { useSearch } from '../composables/useSearch';
@@ -40,8 +38,5 @@ const { convertColumnNames } = useFormat();
         </label>
         <!-- <Button color="default" outline>search</Button> -->
     </fieldset>
-
-
-    <Result/>
 
 </template>

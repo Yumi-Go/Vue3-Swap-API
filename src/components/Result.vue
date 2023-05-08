@@ -6,25 +6,24 @@ import { useSearch } from '../composables/useSearch';
 import { useSort } from '../composables/useSort';
 import { useFormat } from '../composables/useFormat';
 import PlanetPopup from './PlanetPopup.vue';
+import Page from './Page.vue';
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import Draggable from 'vuedraggable';
 
-const { personItems, fetchData } = useFetchData();
+const { personItems, saveData } = useFetchData();
 
-const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+const storeData = useLocalStorage('all', []);
 
 const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();
 const { convertColumnNames, convertDateFormat, convertPopulationFormat, convertDiameterFormat } = useFormat();
 
-console.log("getData outside onBeforeMount: ", getData.value);
-
 const entireSortResult = ref([]);
+
 onBeforeMount(async () => {
-    await fetchData();
-    console.log("getData: ", getData.value);
-    filterByColumns(getData.value);
-    entireSortResult.value = getData.value;
+    await saveData(1);
+    filterByColumns(storeData.value);
+    entireSortResult.value = storeData.value;
 });
 
 const isModalOpened = ref(false);
@@ -42,7 +41,7 @@ watch(checkedColumns, () => {
 });
 
 function holdEntireSortResult(column) {
-    sortTable(getData.value, column);
+    sortTable(storeData.value, column);
     entireSortResult.value = sortResult.value;
 }
 
@@ -57,6 +56,12 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
     planetPopulation.value = pPopulation;
     isModalOpened.value = true;
 }
+
+async function pageButtonClick(pageNum) {
+    await saveData(pageNum);
+    filterByColumns(storeData.value);
+}
+
 
 </script>
 
@@ -112,6 +117,7 @@ function openModal(pName, pDiameter, pClimate, pPopulation) {
 </div>
 
 <div class="flex flex-row">
+    <Page @pageButtonClick="pageButtonClick"/>
 
 </div>
 

@@ -24,11 +24,11 @@ function nextPageButtonClick() {
 
 <template>
 
-<div class="flex flex-row justify-center">
+<div class="flex justify-center w-full">
     <div class="btn-group">
-        <button v-if="isPrevPageExist" @click="prevPageButtonClick()" class="btn">«</button>
-        <button class="btn">Page {{ currentPageNo }}</button>
-        <button v-if="isNextPageExist" @click="nextPageButtonClick()" class="btn">»</button>
+        <button v-if="isPrevPageExist" @click="prevPageButtonClick()" class="btn btn-ghost"><font-awesome-icon icon="fa-solid fa-arrow-left" /></button>
+        <button class="btn btn-ghost">Page {{ currentPageNo }}</button>
+        <button v-if="isNextPageExist" @click="nextPageButtonClick()" class="btn btn-ghost"><font-awesome-icon icon="fa-solid fa-arrow-right" /></button>
     </div>
 </div>
 

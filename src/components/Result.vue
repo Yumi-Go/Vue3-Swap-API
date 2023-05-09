@@ -68,16 +68,15 @@ async function pageButtonClick(pageNum) {
 
 <template>
 
-<div class="">
+<PlanetPopup v-if="isModalOpened"
+:planetName="planetName"
+:planetDiameter="planetDiameter"
+:planetClimate="planetClimate"
+:planetPopulation="planetPopulation"
+@closeModal="closeModal"/>
 
-    <PlanetPopup v-if="isModalOpened"
-    :planetName="planetName"
-    :planetDiameter="planetDiameter"
-    :planetClimate="planetClimate"
-    :planetPopulation="planetPopulation"
-    @closeModal="closeModal"/>
+<div class="flex flex-row justify-center">
 
-    <p>search: {{ search }}</p>
     <table class="w-[1000px] table-auto">
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"

@@ -2,15 +2,13 @@
 import Search from './components/Search.vue';
 import Result from './components/Result.vue';
 
-window.onscroll = () => fromWhereTopBtnVisibile();
-
-function fromWhereTopBtnVisibile() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    topBtn.style.display = "block";
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 20) {
+    document.getElementById("topBtn").style.display = "block";
   } else {
-    topBtn.style.display = "none";
+    document.getElementById("topBtn").style.display = "none";
   }
-}
+});
 
 function goToTop() {
   document.body.scrollTop = 0;
@@ -24,6 +22,10 @@ function goToTop() {
     <h1>Star Wars Application</h1>
     <Search/>
     <Result/>
-    <button @click="goToTop()" id="topBtn">Top</button>
+
   </div>
+  <button
+  @click="goToTop()" id="topBtn"
+  class="btn btn-active btn-ghost fixed bottom-10 right-10">Top</button>
+
 </template>

@@ -13,22 +13,22 @@ const { convertColumnNames } = useFormat();
 
 <template>
     
-    <div class="flex flex-row bg-indigo-900">
-        <div class="w-[1000px] flex justify-between">
-            <div class="p-2"><font-awesome-icon icon="fa-magnifying-glass" size="lg"/></div>
-            <div class="w-full">
-                <input
-                class="my-2 placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-2 pr-3 shadow-sm focus:outline-none focus:border-gray-500"
-                placeholder="Type to search..."
-                type="text"
-                v-model="search"
-                id="searchInput"
-                name="search"/>
-            </div>
+<div class="flex flex-row justify-center bg-indigo-900">
+    <div class="w-[1000px] flex justify-between">
+        <div class="p-2"><font-awesome-icon icon="fa-magnifying-glass" size="lg"/></div>
+        <div class="w-full">
+            <input
+            class="my-2 placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 py-2 pl-2 pr-3 shadow-sm focus:outline-none focus:border-gray-500"
+            placeholder="Type to search..."
+            type="text"
+            v-model="search"
+            id="searchInput"
+            name="search"/>
         </div>
     </div>
+</div>
 
-    <p>{{ checkedColumns }}</p>
+<div class="flex flex-row justify-center">
     <fieldset class="p-3 my-5 border-solid border-2 border-indigo-200">
         <legend>Check the columns to be searched.</legend>
         <label v-for="(column, index) in personItems" :key="index">
@@ -37,5 +37,5 @@ const { convertColumnNames } = useFormat();
         </label>
         <!-- <Button color="default" outline>search</Button> -->
     </fieldset>
-
+</div>
 </template>

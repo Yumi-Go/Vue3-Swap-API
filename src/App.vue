@@ -26,6 +26,16 @@ function goToTop() {
   </div>
   <button
   @click="goToTop()" id="topBtn"
-  class="btn btn-active btn-ghost fixed bottom-10 right-10">Top</button>
+  class="btn btn-active btn-circle btn-ghost fixed bottom-10 right-10">
+    
+    <div class="flex flex-col">
+      <div>
+        <font-awesome-icon icon="fa-solid fa-angles-up" class=""/>
+      </div>
+      <div>
+        Top
+      </div>
+    </div>
+  </button>
 
 </template>

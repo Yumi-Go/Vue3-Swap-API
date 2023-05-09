@@ -27,6 +27,7 @@ onBeforeMount(async () => {
 });
 
 const isModalOpened = ref(false);
+const personName = ref('');
 const planetName = ref('');
 const planetDiameter = ref('');
 const planetClimate = ref('');
@@ -49,11 +50,12 @@ function closeModal() {
     isModalOpened.value = false;
 }
 
-function openModal(pName, pDiameter, pClimate, pPopulation) {
-    planetName.value = pName;
-    planetDiameter.value = pDiameter;
-    planetClimate.value = pClimate;
-    planetPopulation.value = pPopulation;
+function openModal(person_name, planet_name, planet_diameter, planet_climate, planet_population) {
+    personName.value = person_name;
+    planetName.value = planet_name;
+    planetDiameter.value = planet_diameter;
+    planetClimate.value = planet_climate;
+    planetPopulation.value = planet_population;
     isModalOpened.value = true;
 }
 
@@ -69,6 +71,7 @@ async function pageButtonClick(pageNum) {
 <template>
 
 <PlanetPopup v-if="isModalOpened"
+:personName="personName"
 :planetName="planetName"
 :planetDiameter="planetDiameter"
 :planetClimate="planetClimate"
@@ -97,12 +100,14 @@ async function pageButtonClick(pageNum) {
             class="border-solid border-2 bg-white shadow">
                 <td v-for="column in personItems" class="border-solid border-2">
                     <span v-if="column === 'homeworld'" class="">
-                        <label for="my-modal-4" class="cursor-pointer btn btn-ghost"
+                        <label for="my-modal-4" class="cursor-pointer text-indigo-900"
                         @click="openModal(
+                            person['name'],
                             person[column]['name'],
                             convertDiameterFormat(person[column]['diameter']),
                             person[column]['climate'],
                             convertPopulationFormat(person[column]['population']))">
+                            <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" size="2xs" class="pr-2"/>
                             {{ person[column]['name'] }}
                         </label>
                     </span>

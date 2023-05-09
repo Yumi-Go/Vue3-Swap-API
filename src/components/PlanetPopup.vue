@@ -1,6 +1,7 @@
 <script setup>
 
 const props = defineProps({
+    personName: String,
     planetName: String,
     planetDiameter: String,
     planetClimate: String,
@@ -17,18 +18,52 @@ const emit = defineEmits([
 
 <input type="checkbox" id="my-modal-4" class="modal-toggle" />
 <label for="my-modal-4" class="modal cursor-pointer">
-  <label class="modal-box relative" for="">
+    <label class="modal-box relative" for="">
 
-    <label for="my-modal-4" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <div class="w-full mt-5">
+            <div class="flex justify-between pb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-indigo-900">
+                        <font-awesome-icon icon="fa-solid fa-earth-americas" class="pr-2"/>
+                        Homeworld
+                    </h3>
+                </div>
 
-    <h3 class="text-lg font-bold py-5 divider">Homeworld</h3>
-    <div class="card-body shadow-xl bg-gray-100">
-        <p class="py-1">Planet Name: {{ planetName }}</p>
-        <p class="py-1">Planet Diameter: {{ planetDiameter }}</p>
-        <p class="py-1">Planet Climate: {{ planetClimate }}</p>
-        <p class="py-1">Planet Population: {{ planetPopulation }}</p>
-    </div>
-  </label>
+                <div class="">
+                    <h3 class="text-lg font-bold text-gray-400">
+                        {{ personName }}
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body bg-gray-100 border-gray-500 border-solid border-y-[1px]">
+            <table class="table table-compact table-zebra w-full text-indigo-900 shadow-md">
+                <tbody>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ planetName }}</td>
+                </tr>
+                <tr>
+                    <th>Diameter</th>
+                    <td>{{ planetDiameter }}</td>
+                </tr>
+                <tr>
+                    <th>Climate</th>
+                    <td>{{ planetClimate }}</td>
+                </tr>
+                <tr>
+                    <th>Population</th>
+                    <td>{{ planetPopulation }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-action">
+            <label for="my-modal-4" class="btn btn-outline btn-sm">Close</label>
+        </div>
+    </label>
 </label>
 
 </template>

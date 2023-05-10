@@ -100,7 +100,10 @@ async function pageButtonClick(pageNum) {
             class="border-b-[1px]">
                 <td v-for="column in personItems" class=" p-5">
                     <span v-if="column === 'homeworld'" class="">
-                        <label for="my-modal-4" class="cursor-pointer text-indigo-900"
+                        <label for="my-modal-4" v-if="person[column]['name'] === 'unknown'" class="cursor-text">
+                            {{ person[column]['name'] }}
+                        </label>
+                        <label for="my-modal-4" v-else class="cursor-pointer text-indigo-900"
                         @click="openModal(
                             person['name'],
                             person[column]['name'],

@@ -26,23 +26,39 @@ onBeforeMount(async () => {
     entireSortResult.value = storeData.value;
 });
 
-const columnColors = [
-    "bg-red-50",
-    "bg-pink-50",
-    "bg-orange-50",
-    "bg-lime-50",
-    "bg-teal-50",
-    "bg-violet-50"
-];
+const columnColors = {
+    name: "bg-red-50",
+    height: "bg-pink-50",
+    mass: "bg-orange-50",
+    created: "bg-lime-50",
+    edited: "bg-teal-50",
+    homeworld: "bg-violet-50"
+};
 
-const thColors = [
-    "bg-red-200",
-    "bg-pink-200",
-    "bg-orange-200",
-    "bg-lime-200",
-    "bg-teal-200",
-    "bg-violet-200"
-];
+function setColumnColors(column) {
+    for(const [columnName, color] of Object.entries(columnColors)) {
+        if (column === columnName) {
+            return color;
+        }
+    }
+}
+
+const thColors = {
+    name: "bg-red-200",
+    height: "bg-pink-200",
+    mass: "bg-orange-200",
+    created: "bg-lime-200",
+    edited: "bg-teal-200",
+    homeworld: "bg-violet-200"
+};
+
+function setThColors(column) {
+    for(const [columnName, color] of Object.entries(thColors)) {
+        if (column === columnName) {
+            return color;
+        }
+    }
+}
 
 const isModalOpened = ref(false);
 const personName = ref('');
@@ -98,16 +114,16 @@ async function pageButtonClick(pageNum) {
 <div class="flex flex-row justify-center overflow-x-auto">
 
     <table class="w-[1200px] table-fixed table-h tracking-wide">
-        <colgroup v-for="color in columnColors" class="z-10">
-            <col :class=color class="">
+        <colgroup v-for="column in personItems" class="z-10">
+            <col :class=setColumnColors(column) class="">
         </colgroup>
 
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
-                <template #item="{ element: column, index: i }">
+                <template #item="{ element: column }">
                     <th scope="col"
-                    :class=thColors[i]
+                    :class=setThColors(column)
                     class="cursor-move py-5 z-20">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">

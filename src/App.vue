@@ -1,6 +1,7 @@
 <script setup>
 import Search from './components/Search.vue';
 import Result from './components/Result.vue';
+import Title from './components/Title.vue';
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > 20) {
@@ -19,7 +20,7 @@ function goToTop() {
 
 <template>
   <div class="">
-    <h1>Star Wars Application</h1>
+    <Title/>
     <Search/>
     <Result/>
 

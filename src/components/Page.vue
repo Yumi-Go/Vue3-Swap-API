@@ -24,7 +24,7 @@ function nextPageButtonClick() {
 
 <template>
 
-<div class="flex justify-center w-full">
+<div class="flex justify-center w-full py-10">
     <div class="btn-group">
         <button v-if="isPrevPageExist" @click="prevPageButtonClick()" class="btn btn-ghost"><font-awesome-icon icon="fa-solid fa-arrow-left" /></button>
         <button class="btn btn-ghost">Page {{ currentPageNo }}</button>

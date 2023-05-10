@@ -125,7 +125,7 @@ async function pageButtonClick(pageNum) {
         </thead>
         <tbody class="">
             <tr v-for="(person, index) in sortResult" :key="index"
-            class="border-b-[1px] hover:bg-gray-300">
+            class="border-b-[1px] hover:bg-gray-100 hover:border-y-[2px]">
                 <td v-for="column in personItems" class=" p-5">
                     <span v-if="column === 'homeworld'" class="">
                         <label for="my-modal-4" v-if="person[column]['name'] === 'unknown'" class="cursor-text">

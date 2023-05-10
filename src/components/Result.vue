@@ -26,6 +26,30 @@ onBeforeMount(async () => {
     entireSortResult.value = storeData.value;
 });
 
+const props = defineProps({
+    colors: Object
+});
+
+function setColumnColors(column) {
+    if (props.colors) {
+        for(const [columnName, color] of Object.entries(props.colors)) {
+            if (column === columnName) {
+                return `bg-${color}-50`;
+            }
+        }
+    }
+}
+
+function setThColors(column) {
+    if (props.colors) {
+        for(const [columnName, color] of Object.entries(props.colors)) {
+            if (column === columnName) {
+                return `bg-${color}-200`;
+            }
+        }
+    }
+}
+
 const isModalOpened = ref(false);
 const personName = ref('');
 const planetName = ref('');
@@ -65,7 +89,6 @@ async function pageButtonClick(pageNum) {
     entireSortResult.value = storeData.value;
 }
 
-
 </script>
 
 <template>
@@ -81,15 +104,20 @@ async function pageButtonClick(pageNum) {
 <div class="flex flex-row justify-center overflow-x-auto">
 
     <table class="w-[1200px] table-fixed table-h tracking-wide">
+        <colgroup v-for="column in personItems" class="z-10">
+            <col :class=setColumnColors(column) class="">
+        </colgroup>
+
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
-                    class="cursor-move border-solid py-5">
+                    :class=setThColors(column)
+                    class="cursor-move py-5 z-20">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
-                            <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50"/>
+                            <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50 hover:text-black"/>
                         </span>
                     </th>
                 </template>
@@ -97,7 +125,7 @@ async function pageButtonClick(pageNum) {
         </thead>
         <tbody class="">
             <tr v-for="(person, index) in sortResult" :key="index"
-            class="border-b-[1px]">
+            class="border-b-[1px] hover:bg-gray-300">
                 <td v-for="column in personItems" class=" p-5">
                     <span v-if="column === 'homeworld'" class="">
                         <label for="my-modal-4" v-if="person[column]['name'] === 'unknown'" class="cursor-text">
@@ -125,7 +153,6 @@ async function pageButtonClick(pageNum) {
 
 <div class="flex flex-row">
     <Page @pageButtonClick="pageButtonClick"/>
-
 </div>
 
 </template>
@@ -136,49 +163,4 @@ async function pageButtonClick(pageNum) {
   opacity: 0.5;
   background: #c8ebfb;
 }
-
-th:nth-child(1) {
-    background-color: rgb(254 202 202);
-}
-td:nth-child(1) {
-    background-color: rgb(254 242 242);
-}
-
-th:nth-child(2) {
-    background-color: rgb(251 207 232);
-}
-td:nth-child(2) {
-    background-color: rgb(253 242 248);
-}
-
-th:nth-child(3) {
-    background-color: rgb(254 215 170);
-}
-td:nth-child(3) {
-    background-color: rgb(255 247 237);
-}
-
-th:nth-child(4) {
-    background-color: rgb(217 249 157);
-}
-td:nth-child(4) {
-    background-color: rgb(247 254 231);
-}
-
-th:nth-child(5) {
-    background-color: rgb(153 246 228);
-}
-td:nth-child(5) {
-    background-color: rgb(240 253 250);
-}
-
-th:nth-child(6) {
-    background-color: rgb(221 214 254)
-}
-td:nth-child(6) {
-    background-color: rgb(245 243 255);
-}
-
-
-
 </style>

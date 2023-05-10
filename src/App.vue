@@ -16,13 +16,22 @@ function goToTop() {
   document.documentElement.scrollTop = 0;
 }
 
+const colors = {
+  name: 'red',
+  height: 'pink',
+  mass: 'orange',
+  created: 'lime',
+  edited: 'teal',
+  homeworld: 'violet'
+};
+
 </script>
 
 <template>
   <div class="">
     <Title/>
-    <Search/>
-    <Result/>
+    <Search :colors="colors"/>
+    <Result :colors="colors"/>
 
   </div>
   <button

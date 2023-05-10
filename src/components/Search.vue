@@ -10,49 +10,53 @@ const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
 
+const props = defineProps({
+    colors: Object
+});
+
 function searchTagColor(column) {
     let result = '';
         if (column === "name") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-red-700 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.name}-700 cursor-pointer`;
             } else {
-                result = "rounded-full text-red-700 bg-red-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.name}-700 bg-${props.colors.name}-100 cursor-pointer`;
             }
         }
         else if (column === "height") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-pink-600 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.height}-600 cursor-pointer`;
             } else {
-                result = "rounded-full text-pink-700 bg-pink-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.height}-700 bg-${props.colors.height}-100 cursor-pointer`;
             }
         }
         else if (column === "mass") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-orange-500 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.mass}-500 cursor-pointer`;
             } else {
-                result = "rounded-full text-orange-700 bg-orange-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.mass}-700 bg-${props.colors.mass}-100 cursor-pointer`;
             }
         }
         else if (column === "created") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-lime-500 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.created}-500 cursor-pointer`;
             } else {
-                result = "rounded-full text-lime-700 bg-lime-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.created}-700 bg-${props.colors.created}-100 cursor-pointer`;
 
             }
         }
         else if (column === "edited") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-teal-600 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.edited}-600 cursor-pointer`;
             } else {
-                result = "rounded-full text-teal-700 bg-teal-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.edited}-700 bg-${props.colors.edited}-100 cursor-pointer`;
             }
         }
         else if (column === "homeworld") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-violet-700 cursor-pointer";
+                result = `rounded-full text-white bg-${props.colors.homeworld}-700 cursor-pointer`;
             } else {
-                result = "rounded-full text-violet-700 bg-violet-100 cursor-pointer";
+                result = `rounded-full text-${props.colors.homeworld}-700 bg-${props.colors.homeworld}-100 cursor-pointer`;
 
             }
         }
@@ -65,13 +69,12 @@ function selectAll() {
             checkedColumns.value.push(column);
         }
     })
-    console.log("selectAll: ", checkedColumns.value);
 }
 
 function deSelectAll() {
     checkedColumns.value = [];
-    console.log("deSelectAll: ", checkedColumns.value);
 }
+
 
 </script>
 

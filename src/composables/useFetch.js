@@ -71,8 +71,6 @@ export function useFetchData() {
                 });
             }
 
-            console.log("planetsPromises: ", planetsPromises);
-
             await Promise.all(planetsPromises)
             .then(allPagePlanets => {
                 allPagePlanets.forEach(singlePagePlanets => {

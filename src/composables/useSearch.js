@@ -1,10 +1,8 @@
 import { ref } from "vue";
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import { useSort } from './useSort';
 import { useFormat } from './useFormat';
 
 const { convertDateFormat } = useFormat();
-
 
 const search = ref('');
 const checkedColumns = ref([]);
@@ -24,7 +22,6 @@ export function useSearch() {
         } else {
             const allColumnsResult = [];
             checkedColumns.value.forEach(column => {
-                console.log("column: ", column);
                 let eachColumnResult = [];
                 if (column === 'name') {
                     eachColumnResult = filterByName(allData);
@@ -41,14 +38,9 @@ export function useSearch() {
                 }
                 eachColumnResult.forEach(person => allColumnsResult.push(person));
             });
-            console.log("allColumnsResult in filterByColumns: ", allColumnsResult);
             searchResult.value = allColumnsResult;
         }
         sortResult.value = searchResult.value;
-        console.log("searchResult after filter: ", searchResult.value);
-        console.log("sortResult after filter: ", sortResult.value);
-        // return searchResult.value;
-
     }
 
     function filterByName(allData) {
@@ -61,8 +53,6 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByName: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
 
@@ -76,8 +66,6 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByHeight: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
 
@@ -91,8 +79,6 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByMass: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
 
@@ -106,8 +92,6 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByMass: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
 
@@ -121,8 +105,6 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByMass: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
 
@@ -136,11 +118,8 @@ export function useSearch() {
             }
         });
         searchResult.value = result;
-        console.log("searchResult after filterByPlanet: ", searchResult.value);
-        console.log("unique index of person: ", uniqueIndex.value);
         return result;
     }
-
 
     return { search, checkedColumns, searchResult, filterByColumns }
 }

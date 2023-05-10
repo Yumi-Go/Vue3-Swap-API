@@ -7,7 +7,7 @@ import { useSort } from '../composables/useSort';
 import { useFormat } from '../composables/useFormat';
 import PlanetPopup from './PlanetPopup.vue';
 import Page from './Page.vue';
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+import { useLocalStorage } from '@vueuse/core';
 import Draggable from 'vuedraggable';
 
 const { personItems, saveData } = useFetchData();
@@ -26,29 +26,23 @@ onBeforeMount(async () => {
     entireSortResult.value = storeData.value;
 });
 
-const props = defineProps({
-    colors: Object
-});
+const columnColors = [
+    "bg-red-50",
+    "bg-pink-50",
+    "bg-orange-50",
+    "bg-lime-50",
+    "bg-teal-50",
+    "bg-violet-50"
+];
 
-function setColumnColors(column) {
-    if (props.colors) {
-        for(const [columnName, color] of Object.entries(props.colors)) {
-            if (column === columnName) {
-                return `bg-${color}-50`;
-            }
-        }
-    }
-}
-
-function setThColors(column) {
-    if (props.colors) {
-        for(const [columnName, color] of Object.entries(props.colors)) {
-            if (column === columnName) {
-                return `bg-${color}-200`;
-            }
-        }
-    }
-}
+const thColors = [
+    "bg-red-200",
+    "bg-pink-200",
+    "bg-orange-200",
+    "bg-lime-200",
+    "bg-teal-200",
+    "bg-violet-200"
+];
 
 const isModalOpened = ref(false);
 const personName = ref('');
@@ -104,16 +98,16 @@ async function pageButtonClick(pageNum) {
 <div class="flex flex-row justify-center overflow-x-auto">
 
     <table class="w-[1200px] table-fixed table-h tracking-wide">
-        <colgroup v-for="column in personItems" class="z-10">
-            <col :class=setColumnColors(column) class="">
+        <colgroup v-for="color in columnColors" class="z-10">
+            <col :class=color class="">
         </colgroup>
 
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
-                <template #item="{ element: column }">
+                <template #item="{ element: column, index: i }">
                     <th scope="col"
-                    :class=setThColors(column)
+                    :class=thColors[i]
                     class="cursor-move py-5 z-20">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">

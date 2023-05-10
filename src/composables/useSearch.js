@@ -1,8 +1,9 @@
 import { ref } from "vue";
 import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import { useSort } from './useSort';
+import { useFormat } from './useFormat';
 
-const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+const { convertDateFormat } = useFormat();
 
 
 const search = ref('');
@@ -97,7 +98,7 @@ export function useSearch() {
 
     function filterByCreated(allData) {
         const result = allData.filter((obj, index) => {
-            if (obj['created'].toLowerCase().match(search.value.toLowerCase())) {
+            if (convertDateFormat(obj['created']).toLowerCase().match(search.value.toLowerCase())) {
                 if (!(uniqueIndex.value.includes(index))) {
                     uniqueIndex.value.push(index);
                     return obj['created'].toLowerCase().match(search.value.toLowerCase());
@@ -112,7 +113,7 @@ export function useSearch() {
 
     function filterByEdited(allData) {
         const result = allData.filter((obj, index) => {
-            if (obj['edited'].toLowerCase().match(search.value.toLowerCase())) {
+            if (convertDateFormat(obj['edited']).toLowerCase().match(search.value.toLowerCase())) {
                 if (!(uniqueIndex.value.includes(index))) {
                     uniqueIndex.value.push(index);
                     return obj['edited'].toLowerCase().match(search.value.toLowerCase());

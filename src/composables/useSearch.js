@@ -101,7 +101,7 @@ export function useSearch() {
             if (convertDateFormat(obj['created']).toLowerCase().match(search.value.toLowerCase())) {
                 if (!(uniqueIndex.value.includes(index))) {
                     uniqueIndex.value.push(index);
-                    return obj['created'].toLowerCase().match(search.value.toLowerCase());
+                    return convertDateFormat(obj['created']).toLowerCase().match(search.value.toLowerCase());
                 }
             }
         });
@@ -116,7 +116,7 @@ export function useSearch() {
             if (convertDateFormat(obj['edited']).toLowerCase().match(search.value.toLowerCase())) {
                 if (!(uniqueIndex.value.includes(index))) {
                     uniqueIndex.value.push(index);
-                    return obj['edited'].toLowerCase().match(search.value.toLowerCase());
+                    return convertDateFormat(obj['edited']).toLowerCase().match(search.value.toLowerCase());
                 }
             }
         });

@@ -50,9 +50,9 @@ function searchTagColor(column) {
         }
         else if (column === "homeworld") {
             if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-indigo-700 cursor-pointer";
+                result = "rounded-full text-white bg-violet-700 cursor-pointer";
             } else {
-                result = "rounded-full text-indigo-700 border-[1px] border-indigo-700 bg-indigo-100 cursor-pointer";
+                result = "rounded-full text-violet-700 border-[1px] border-violet-700 bg-violet-100 cursor-pointer";
 
             }
         }

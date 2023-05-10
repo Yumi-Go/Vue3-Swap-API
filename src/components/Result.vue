@@ -174,10 +174,10 @@ td:nth-child(5) {
 }
 
 th:nth-child(6) {
-    background-color: rgb(199 210 254);
+    background-color: rgb(221 214 254)
 }
 td:nth-child(6) {
-    background-color: rgb(238 242 255);
+    background-color: rgb(245 243 255);
 }
 
 

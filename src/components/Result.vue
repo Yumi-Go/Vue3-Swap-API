@@ -80,16 +80,16 @@ async function pageButtonClick(pageNum) {
 
 <div class="flex flex-row justify-center overflow-x-auto">
 
-    <table class="w-[1200px] table-fixed">
-        <thead class="nth-2n:bg-red-400">
+    <table class="w-[1200px] table-fixed table-h tracking-wide">
+        <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
-                    class="cursor-move border-solid border-gray-300 border-b-[1px] bg-[#ecf2f9] py-5">
+                    class="cursor-move border-solid py-5">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
-                            <font-awesome-icon icon="fa-solid fa-sort"/>
+                            <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50"/>
                         </span>
                     </th>
                 </template>
@@ -97,7 +97,7 @@ async function pageButtonClick(pageNum) {
         </thead>
         <tbody class="">
             <tr v-for="(person, index) in sortResult" :key="index"
-            class="bg-white shadow odd:bg-gray-100 hover:bg-red-200 border-y-[1px]">
+            class="border-b-[1px]">
                 <td v-for="column in personItems" class=" p-5">
                     <span v-if="column === 'homeworld'" class="">
                         <label for="my-modal-4" class="cursor-pointer text-indigo-900"
@@ -132,10 +132,6 @@ async function pageButtonClick(pageNum) {
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
-}
-
-tr:hover {
-    background-color: #0ea5e9;
 }
 
 th:nth-child(1) {

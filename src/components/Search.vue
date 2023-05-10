@@ -16,28 +16,28 @@ function searchTagColor(column) {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-red-700 cursor-pointer";
             } else {
-                result = "rounded-full text-red-700 border-[1px] border-red-700 bg-red-100 cursor-pointer";
+                result = "rounded-full text-red-700 bg-red-100 cursor-pointer";
             }
         }
         else if (column === "height") {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-pink-600 cursor-pointer";
             } else {
-                result = "rounded-full text-pink-700 border-[1px] border-pink-600 bg-pink-100 cursor-pointer";
+                result = "rounded-full text-pink-700 bg-pink-100 cursor-pointer";
             }
         }
         else if (column === "mass") {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-orange-500 cursor-pointer";
             } else {
-                result = "rounded-full text-orange-700 border-[1px] border-orange-500 bg-orange-100 cursor-pointer";
+                result = "rounded-full text-orange-700 bg-orange-100 cursor-pointer";
             }
         }
         else if (column === "created") {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-lime-500 cursor-pointer";
             } else {
-                result = "rounded-full text-lime-700 border-[1px] border-lime-500 bg-lime-100 cursor-pointer";
+                result = "rounded-full text-lime-700 bg-lime-100 cursor-pointer";
 
             }
         }
@@ -45,14 +45,14 @@ function searchTagColor(column) {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-teal-600 cursor-pointer";
             } else {
-                result = "rounded-full text-teal-700 border-[1px] border-teal-600 bg-teal-100 cursor-pointer";
+                result = "rounded-full text-teal-700 bg-teal-100 cursor-pointer";
             }
         }
         else if (column === "homeworld") {
             if (checkedColumns.value.includes(column)) {
                 result = "rounded-full text-white bg-violet-700 cursor-pointer";
             } else {
-                result = "rounded-full text-violet-700 border-[1px] border-violet-700 bg-violet-100 cursor-pointer";
+                result = "rounded-full text-violet-700 bg-violet-100 cursor-pointer";
 
             }
         }

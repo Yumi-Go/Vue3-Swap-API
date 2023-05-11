@@ -12,6 +12,13 @@ const emit = defineEmits([
     'closeModal'
 ]);
 
+const homeworldItems = {
+    Name: props.planetName,
+    Diameter: props.planetDiameter,
+    Climate: props.planetClimate,
+    Population: props.planetPopulation
+};
+
 </script>
 
 <template>
@@ -41,23 +48,11 @@ const emit = defineEmits([
         <div class="card-body bg-gray-100 border-gray-500 border-solid border-y-[1px]">
             <table class="table table-compact table-zebra w-full text-indigo-900 shadow-md">
                 <tbody>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ planetName }}</td>
-                </tr>
-                <tr>
-                    <th>Diameter</th>
-                    <td>{{ planetDiameter }}</td>
-                </tr>
-                <tr>
-                    <th>Climate</th>
-                    <td>{{ planetClimate }}</td>
-                </tr>
-                <tr>
-                    <th>Population</th>
-                    <td>{{ planetPopulation }}</td>
-                </tr>
-                </tbody>
+                    <tr v-for="(value, key) in homeworldItems">
+                        <th>{{ key }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+               </tbody>
             </table>
         </div>
         <div class="modal-action">

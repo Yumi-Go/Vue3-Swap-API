@@ -92,6 +92,7 @@ function openModal(person_name, planet_name, planet_diameter, planet_climate, pl
 }
 
 async function pageButtonClick(pageNum) {
+    search.value = '';
     await saveData(pageNum);
     filterByColumns(allData.value);
     entireSortResult.value = allData.value;

@@ -13,6 +13,7 @@ import draggable from 'vuedraggable';
 const { personItems, saveData } = useFetchData();
 
 const allData = useLocalStorage('all', []);
+console.log(allData.value);
 
 const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();

@@ -1,4 +1,5 @@
 <script setup>
+import { watch } from 'vue';
 
 const props = defineProps({
     personName: String,
@@ -12,12 +13,18 @@ const emit = defineEmits([
     'closeModal'
 ]);
 
-const homeworldItems = {
-    Name: props.planetName,
-    Diameter: props.planetDiameter,
-    Climate: props.planetClimate,
-    Population: props.planetPopulation
-};
+watch(props, () => {
+    homeworldItems();
+});
+
+function homeworldItems() {
+    return {
+        Name: props.planetName,
+        Diameter: props.planetDiameter,
+        Climate: props.planetClimate,
+        Population: props.planetPopulation
+    }
+}
 
 </script>
 
@@ -44,7 +51,7 @@ const homeworldItems = {
         <div class="card-body bg-gray-100 border-gray-500 border-solid border-y-[1px]">
             <table class="table table-compact table-zebra w-full text-indigo-900 shadow-md">
                 <tbody>
-                    <tr v-for="(value, key) in homeworldItems">
+                    <tr v-for="(value, key) in homeworldItems()">
                         <th>{{ key }}</th>
                         <td>{{ value }}</td>
                     </tr>

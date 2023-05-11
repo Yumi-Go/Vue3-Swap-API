@@ -8,7 +8,7 @@ import { useFormat } from '../composables/useFormat';
 import PlanetPopup from './PlanetPopup.vue';
 import Page from './Page.vue';
 import { useLocalStorage } from '@vueuse/core';
-import Draggable from 'vuedraggable';
+import draggable from 'vuedraggable';
 
 const { personItems, saveData } = useFetchData();
 

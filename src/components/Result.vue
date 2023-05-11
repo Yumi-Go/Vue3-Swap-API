@@ -113,7 +113,7 @@ async function pageButtonClick(pageNum) {
 
 <div class="flex flex-row justify-center overflow-x-auto">
 
-    <table class="w-[1200px] table-fixed table-h tracking-wide">
+    <table class="w-[90%] table-fixed tracking-wide">
         <colgroup v-for="column in personItems" class="z-10">
             <col :class=setColumnColors(column) class="">
         </colgroup>
@@ -171,6 +171,6 @@ async function pageButtonClick(pageNum) {
 <style scoped>
 .ghost {
   opacity: 0.5;
-  background: #c8ebfb;
+  background: black;
 }
 </style>

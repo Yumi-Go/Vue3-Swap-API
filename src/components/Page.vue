@@ -2,10 +2,6 @@
 import { useFetchData } from '../composables/useFetch';
 const { currentPageNo, isPrevPageExist, isNextPageExist } = useFetchData();
 
-const props = defineProps({
-
-});
-
 const emit = defineEmits([
     'pageButtonClick'
 ]);
@@ -26,9 +22,20 @@ function nextPageButtonClick() {
 
 <div class="flex justify-center w-full py-10">
     <div class="btn-group">
-        <button v-if="isPrevPageExist" @click="prevPageButtonClick()" class="btn btn-ghost"><font-awesome-icon icon="fa-solid fa-arrow-left" /></button>
-        <button class="btn btn-ghost">Page {{ currentPageNo }}</button>
-        <button v-if="isNextPageExist" @click="nextPageButtonClick()" class="btn btn-ghost"><font-awesome-icon icon="fa-solid fa-arrow-right" /></button>
+        <button v-if="isPrevPageExist"
+        @click="prevPageButtonClick()"
+        class="btn btn-ghost">
+            <font-awesome-icon icon="fa-solid fa-arrow-left"/>
+        </button>
+        <button
+        class="btn btn-ghost">
+            Page {{ currentPageNo }}
+        </button>
+        <button v-if="isNextPageExist"
+        @click="nextPageButtonClick()"
+        class="btn btn-ghost">
+            <font-awesome-icon icon="fa-solid fa-arrow-right"/>
+        </button>
     </div>
 </div>
 

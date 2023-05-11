@@ -1,8 +1,7 @@
 import { ref } from 'vue';
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
+import { useLocalStorage } from '@vueuse/core';
 
-const storeData = useLocalStorage('all', []);
-const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
+const allData = useLocalStorage('all', []);
 const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld'];
 const currentPageNo = ref();
 const isPrevPageExist = ref(false);
@@ -74,9 +73,9 @@ export function useFetchData() {
             await Promise.all(planetsPromises)
             .then(allPagePlanets => {
                 allPagePlanets.forEach(singlePagePlanets => {
-                        singlePagePlanets.results.forEach(planet => {
-                            planetsData.value.push(planet);
-                        });
+                    singlePagePlanets.results.forEach(planet => {
+                        planetsData.value.push(planet);
+                    });
                 });
             })
             .catch(error => {
@@ -110,7 +109,6 @@ export function useFetchData() {
                 singlePageRefinedData.push(personRefinedData);
             });
             refinedData.value = singlePageRefinedData;
-
         } catch (error) {
             console.log(error);
         }
@@ -136,13 +134,13 @@ export function useFetchData() {
     async function saveData(pageNum) {
         try {
             currentPageNo.value = pageNum;
-            storeData.value = [];
+            allData.value = [];
             const people = [];
             await refineData(pageNum);
             refinedData.value.forEach(person => {
                 people.push(person);
             });
-            storeData.value = people;
+            allData.value = people;
         } catch (error) {
             console.error(error);
         }

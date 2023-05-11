@@ -1,7 +1,5 @@
 import { ref } from "vue";
-import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 
-const getData = useLocalStorage("all", null, { serializer: StorageSerializers.object });
 const sortResult = ref([]);
 
 export function useSort() {
@@ -40,8 +38,6 @@ export function useSort() {
         }
         prevColumn = column;
         sortResult.value = objects;
-
-        // return sortResult.value;
     }
 
     return { sortResult, sortTable }

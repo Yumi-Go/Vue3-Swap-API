@@ -12,7 +12,7 @@ import Draggable from 'vuedraggable';
 
 const { personItems, saveData } = useFetchData();
 
-const storeData = useLocalStorage('all', []);
+const allData = useLocalStorage('all', []);
 
 const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();
@@ -22,8 +22,8 @@ const entireSortResult = ref([]);
 
 onBeforeMount(async () => {
     await saveData(1);
-    filterByColumns(storeData.value);
-    entireSortResult.value = storeData.value;
+    filterByColumns(allData.value);
+    entireSortResult.value = allData.value;
 });
 
 const columnColors = {
@@ -34,7 +34,6 @@ const columnColors = {
     edited: "bg-teal-50",
     homeworld: "bg-violet-50"
 };
-
 function setColumnColors(column) {
     for(const [columnName, color] of Object.entries(columnColors)) {
         if (column === columnName) {
@@ -51,7 +50,6 @@ const thColors = {
     edited: "bg-teal-200",
     homeworld: "bg-violet-200"
 };
-
 function setThColors(column) {
     for(const [columnName, color] of Object.entries(thColors)) {
         if (column === columnName) {
@@ -76,14 +74,13 @@ watch(checkedColumns, () => {
 });
 
 function holdEntireSortResult(column) {
-    sortTable(storeData.value, column);
+    sortTable(allData.value, column);
     entireSortResult.value = sortResult.value;
 }
 
 function closeModal() {
     isModalOpened.value = false;
 }
-
 function openModal(person_name, planet_name, planet_diameter, planet_climate, planet_population) {
     personName.value = person_name;
     planetName.value = planet_name;
@@ -95,8 +92,8 @@ function openModal(person_name, planet_name, planet_diameter, planet_climate, pl
 
 async function pageButtonClick(pageNum) {
     await saveData(pageNum);
-    filterByColumns(storeData.value);
-    entireSortResult.value = storeData.value;
+    filterByColumns(allData.value);
+    entireSortResult.value = allData.value;
 }
 
 </script>
@@ -117,7 +114,6 @@ async function pageButtonClick(pageNum) {
         <colgroup v-for="column in personItems" class="z-10">
             <col :class=setColumnColors(column) class="">
         </colgroup>
-
         <thead class="">
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
@@ -147,14 +143,18 @@ async function pageButtonClick(pageNum) {
                             person[column]['name'],
                             convertDiameterFormat(person[column]['diameter']),
                             person[column]['climate'],
-                            convertPopulationFormat(person[column]['population']))">
+                            convertPopulationFormat(person[column]['population'])
+                        )">
                             <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" size="2xs" class="pr-2"/>
                             {{ person[column]['name'] }}
                         </label>
                     </span>
                     <span v-else-if="column === 'created' || column === 'edited'">
-                        {{ convertDateFormat(person[column]) }}</span>
-                    <span v-else class="">{{ person[column] }}</span>
+                        {{ convertDateFormat(person[column]) }}
+                    </span>
+                    <span v-else>
+                        {{ person[column] }}
+                    </span>
                 </td>
             </tr>
         </tbody>

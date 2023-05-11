@@ -8,51 +8,48 @@ const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
 function searchTagBtn(column) {
-    let result = '';
-        if (column === "name") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-red-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-red-700 bg-red-100 cursor-pointer";
-            }
+    if (column === "name") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-red-500 cursor-pointer";
+        } else {
+            return "rounded-full text-red-700 bg-red-100 cursor-pointer";
         }
-        else if (column === "height") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-pink-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-pink-700 bg-pink-100 cursor-pointer";
-            }
+    }
+    else if (column === "height") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-pink-500 cursor-pointer";
+        } else {
+            return "rounded-full text-pink-700 bg-pink-100 cursor-pointer";
         }
-        else if (column === "mass") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-orange-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-orange-700 bg-orange-100 cursor-pointer";
-            }
+    }
+    else if (column === "mass") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-orange-500 cursor-pointer";
+        } else {
+            return "rounded-full text-orange-700 bg-orange-100 cursor-pointer";
         }
-        else if (column === "created") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-lime-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-lime-700 bg-lime-100 cursor-pointer";
-            }
+    }
+    else if (column === "created") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-lime-500 cursor-pointer";
+        } else {
+            return "rounded-full text-lime-700 bg-lime-100 cursor-pointer";
         }
-        else if (column === "edited") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-teal-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-teal-700 bg-teal-100 cursor-pointer";
-            }
+    }
+    else if (column === "edited") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-teal-500 cursor-pointer";
+        } else {
+            return "rounded-full text-teal-700 bg-teal-100 cursor-pointer";
         }
-        else if (column === "homeworld") {
-            if (checkedColumns.value.includes(column)) {
-                result = "rounded-full text-white bg-violet-500 cursor-pointer";
-            } else {
-                result = "rounded-full text-violet-700 bg-violet-100 cursor-pointer";
-
-            }
+    }
+    else if (column === "homeworld") {
+        if (checkedColumns.value.includes(column)) {
+            return "rounded-full text-white bg-violet-500 cursor-pointer";
+        } else {
+            return "rounded-full text-violet-700 bg-violet-100 cursor-pointer";
         }
-    return result;
+    }
 }
 
 function selectAll() {
@@ -62,11 +59,9 @@ function selectAll() {
         }
     })
 }
-
 function deSelectAll() {
     checkedColumns.value = [];
 }
-
 
 </script>
 
@@ -97,13 +92,17 @@ function deSelectAll() {
     class="mx-2 p-2"
     :class="searchTagBtn(column)">
         <input type="checkbox" class="hidden" :id="column" :name="column" :value="column" v-model="checkedColumns">
-            <span v-if="checkedColumns.includes(column)"><font-awesome-icon icon="fa-solid fa-xmark"/></span>
-            <span v-else><font-awesome-icon icon="fa-solid fa-check"/></span>
-            <span class="pl-2 mr-5 text-sm">{{ convertColumnNames(column) }}</span>
+            <span v-if="checkedColumns.includes(column)">
+                <font-awesome-icon icon="fa-solid fa-xmark"/>
+            </span>
+            <span v-else>
+                <font-awesome-icon icon="fa-solid fa-check"/>
+            </span>
+            <span class="pl-2 mr-5 text-sm">
+                {{ convertColumnNames(column) }}
+            </span>
     </label>
 </div>
-
-
 
 <div class="flex flex-row justify-center p-1 mb-10">
     <div class="flex justify-between">
@@ -121,9 +120,5 @@ function deSelectAll() {
         </div>
     </div>
 </div>
-
-
-
-
 
 </template>

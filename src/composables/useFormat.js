@@ -28,7 +28,5 @@ export function useFormat() {
         return Number(diameter).toLocaleString()+' km';
     }
 
-
-
     return { convertColumnNames, convertDateFormat, convertPopulationFormat, convertDiameterFormat }
 }

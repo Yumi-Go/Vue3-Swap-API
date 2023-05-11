@@ -114,13 +114,13 @@ async function pageButtonClick(pageNum) {
         <colgroup v-for="column in personItems" class="z-10">
             <col :class=setColumnColors(column) class="">
         </colgroup>
-        <thead class="">
+        <thead>
             <draggable v-model="personItems" tag="tr" :item-key="key => key"
                 @end="filterByColumns(sortResult)" ghost-class="ghost">
                 <template #item="{ element: column }">
                     <th scope="col"
                     :class=setThColors(column)
-                    class="cursor-move py-5 z-20">
+                    class="cursor-move py-5">
                         <span class="">{{ convertColumnNames(column) }}</span>
                         <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50 hover:text-black"/>

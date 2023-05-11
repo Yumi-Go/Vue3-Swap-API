@@ -1,28 +1,24 @@
 <script setup>
-
 const props = defineProps({
-    personName: String,
-    planetName: String,
+    person: {type: Object, default: null},
+    planet: {type: Object, default: null},
+    planet: String,
     planetDiameter: String,
     planetClimate: String,
     planetPopulation: String,
 });
 
-const emit = defineEmits([
-    'closeModal'
-]);
+const emit = defineEmits(['closeModal']);
 
-const homeworldItems = {
-    Name: props.planetName,
+const homeworldItems = { // "columns", instead?
+    Name: props.planetName, // uppercase here is a little odd, I'd go with "name, diameter, climate etc"
     Diameter: props.planetDiameter,
     Climate: props.planetClimate,
     Population: props.planetPopulation
 };
-
 </script>
 
 <template>
-
 <input type="checkbox" id="my-modal-4" class="modal-toggle" />
 <label for="my-modal-4" class="modal cursor-pointer">
     <label class="modal-box relative">
@@ -44,7 +40,7 @@ const homeworldItems = {
         <div class="card-body bg-gray-100 border-gray-500 border-solid border-y-[1px]">
             <table class="table table-compact table-zebra w-full text-indigo-900 shadow-md">
                 <tbody>
-                    <tr v-for="(value, key) in homeworldItems">
+                    <tr v-for="(value, key) in props">
                         <th>{{ key }}</th>
                         <td>{{ value }}</td>
                     </tr>
@@ -56,7 +52,6 @@ const homeworldItems = {
         </div>
     </label>
 </label>
-
 </template>
 
 

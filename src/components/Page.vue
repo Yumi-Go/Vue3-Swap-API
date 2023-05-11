@@ -7,11 +7,13 @@ const emit = defineEmits([
 ]);
 
 function prevPageButtonClick() {
+    // TODO add limit guard, so it doesn't get to be a negative number
     currentPageNo.value--;
     emit('pageButtonClick', currentPageNo.value);
 }
 
 function nextPageButtonClick() {
+    // TODO add limit so it doesn't get to numbers larger than last page
     currentPageNo.value++;
     emit('pageButtonClick', currentPageNo.value);
 }

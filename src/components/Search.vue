@@ -7,49 +7,19 @@ const { search, checkedColumns } = useSearch();
 const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
-function searchTagBtn(column) {
-    if (column === "name") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-red-500 cursor-pointer";
-        } else {
-            return "rounded-full text-red-700 bg-red-100 cursor-pointer";
-        }
-    }
-    else if (column === "height") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-pink-500 cursor-pointer";
-        } else {
-            return "rounded-full text-pink-700 bg-pink-100 cursor-pointer";
-        }
-    }
-    else if (column === "mass") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-orange-500 cursor-pointer";
-        } else {
-            return "rounded-full text-orange-700 bg-orange-100 cursor-pointer";
-        }
-    }
-    else if (column === "created") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-lime-500 cursor-pointer";
-        } else {
-            return "rounded-full text-lime-700 bg-lime-100 cursor-pointer";
-        }
-    }
-    else if (column === "edited") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-teal-500 cursor-pointer";
-        } else {
-            return "rounded-full text-teal-700 bg-teal-100 cursor-pointer";
-        }
-    }
-    else if (column === "homeworld") {
-        if (checkedColumns.value.includes(column)) {
-            return "rounded-full text-white bg-violet-500 cursor-pointer";
-        } else {
-            return "rounded-full text-violet-700 bg-violet-100 cursor-pointer";
-        }
-    }
+function getColor(column) {
+    const checked = checkedColumns.value.includes(column);
+
+    const colors = {
+        name: checked ? 'bg-red-500' : 'text-red-700 bg-red-100',
+        height: checked ? 'bg-pink-500' : 'text-pink-700 bg-pink-100',
+        mass: checked ? 'bg-orange-500' : 'text-orange-700 bg-orange-100',
+        created: checked ? 'bg-lime-500' : 'text-lime-700 bg-lime-100',
+        edited: checked ? 'bg-teal-500' : 'text-teal-700 bg-teal-100',
+        homeworld: checked ? 'bg-violet-500' : 'text-violet-700 bg-violet-100',
+    };
+
+    return `rounded-full ${colors[column]} cursor-pointer`
 }
 
 function selectAll() {
@@ -68,6 +38,7 @@ function deSelectAll() {
 
 <template>
 
+<!-- This block could be extracted into its own component -->
 <div class="flex flex-row justify-center p-3 my-5">
     <div class="flex w-[1000px]">
         <label class="relative w-full">
@@ -87,23 +58,21 @@ function deSelectAll() {
     </div>
 </div>
 
+<!-- This block could be extracted into its own component -->
 <div class="flex flex-row justify-center p-3 mt-5">
     <label v-for="(column, index) in personItems" :key="index"
     class="mx-2 p-2"
-    :class="searchTagBtn(column)">
+    :class="getColor(column)">
         <input type="checkbox" class="hidden" :id="column" :name="column" :value="column" v-model="checkedColumns">
-            <span v-if="checkedColumns.includes(column)">
-                <font-awesome-icon icon="fa-solid fa-xmark"/>
-            </span>
-            <span v-else>
-                <font-awesome-icon icon="fa-solid fa-check"/>
+            <span>
+                <!-- Giving the button a width with w-4 prevents if from "moving" when clicked -->
+                <font-awesome-icon :icon="checkedColumns.includes(column) ? 'fa-solid fa-xmark' : 'fa-solid fa-check'" class="w-4"/>
             </span>
             <span class="pl-2 mr-5 text-sm">
                 {{ convertColumnNames(column) }}
             </span>
     </label>
 </div>
-
 <div class="flex flex-row justify-center p-1 mb-10">
     <div class="flex justify-between">
         <div class="mr-5">

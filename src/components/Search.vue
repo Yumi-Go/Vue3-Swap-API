@@ -7,13 +7,6 @@ const { search, checkedColumns } = useSearch();
 const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
 
-const taskColors = {
-  started: 'bg-surface-success-default',
-  late: 'bg-surface-critical-default',
-  today: 'bg-surface-info-default',
-  upcoming: 'bg-surface-warning-default',
-};
-
 const tagClickedColors = {
     name: "text-white bg-red-500",
     height: "text-white bg-pink-500",

@@ -6,6 +6,7 @@ const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld']
 const currentPageNo = ref();
 const isPrevPageExist = ref(false);
 const isNextPageExist = ref(false);
+const lastPageNo = ref(null);
 
 export function useFetchData() {
     const peopleData = ref([]);
@@ -23,7 +24,6 @@ export function useFetchData() {
                     singlePagePeoplePromise = res.json();
                 }
             });
-
             await Promise.resolve(singlePagePeoplePromise)
             .then(singlePageData => {
                 if (singlePageData.previous !== null) {
@@ -35,6 +35,7 @@ export function useFetchData() {
                     isNextPageExist.value = true;
                 } else {
                     isNextPageExist.value = false;
+                    lastPageNo.value = pageNum;
                 }
                 currentPageNo.value = pageNum;
                 singlePageData.results.forEach(person => {
@@ -57,7 +58,6 @@ export function useFetchData() {
                 const url = `https://swapi.dev/api/planets/?page=${pageNum}`;
                 planetsUrls.push(url);
             }
-
             const planetsPromises = [];
             for (let i = 0; i < planetsUrls.length; i++) {
                 var promise = [];
@@ -69,7 +69,6 @@ export function useFetchData() {
                     }
                 });
             }
-
             await Promise.all(planetsPromises)
             .then(allPagePlanets => {
                 allPagePlanets.forEach(singlePagePlanets => {
@@ -145,7 +144,5 @@ export function useFetchData() {
             console.error(error);
         }
     }
-
-    return { currentPageNo, isPrevPageExist, isNextPageExist, personItems, saveData }
-
+    return { currentPageNo, isPrevPageExist, isNextPageExist, lastPageNo, personItems, saveData }
 }

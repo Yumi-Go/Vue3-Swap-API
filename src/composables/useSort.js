@@ -39,6 +39,5 @@ export function useSort() {
         prevColumn = column;
         sortResult.value = objects;
     }
-
     return { sortResult, sortTable }
 }

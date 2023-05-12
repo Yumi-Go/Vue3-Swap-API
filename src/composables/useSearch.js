@@ -10,13 +10,10 @@ const searchResult = ref([]);
 const uniqueIndex = ref([]);
 const { sortResult } = useSort();
 
-
 export function useSearch() {
 
     function filterByColumns(allData) {
-
         uniqueIndex.value = [];
-        
         if (checkedColumns.value.length < 1) {
             filterByName(allData);
         } else {

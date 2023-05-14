@@ -26,16 +26,38 @@ onBeforeMount(async () => {
     entireSortResult.value = allData.value;
 });
 
-function getColor(item, saturation = 50) {
+function getColumnColor(column) {
     return {
-        name: `bg-red-${saturation}`,
-        height: `bg-pink-${saturation}`,
-        mass: `bg-orange-${saturation}`,
-        created: `bg-lime-${saturation}`,
-        edited: `bg-teal-${saturation}`,
-        homeworld: `bg-violet-${saturation}`
-    }[item]
+        name: "bg-red-50",
+        height: "bg-pink-50",
+        mass: "bg-orange-50",
+        created: "bg-lime-50",
+        edited: "bg-teal-50",
+        homeworld: "bg-violet-50"
+    }[column]
 }
+
+function getThColor(column) {
+    return {
+        name: "bg-red-200",
+        height: "bg-pink-200",
+        mass: "bg-orange-200",
+        created: "bg-lime-200",
+        edited: "bg-teal-200",
+        homeworld: "bg-violet-200"
+    }[column]
+}
+
+// function getColor(item, saturation = 50) {
+//     return {
+//         name: `bg-red-${saturation}`,
+//         height: `bg-pink-${saturation}`,
+//         mass: `bg-orange-${saturation}`,
+//         created: `bg-lime-${saturation}`,
+//         edited: `bg-teal-${saturation}`,
+//         homeworld: `bg-violet-${saturation}`
+//     }[item]
+// }
 
 const isModalOpened = ref(false);
 const personName = ref('');
@@ -82,8 +104,9 @@ async function pageButtonClick(pageNum) {
 
     <div class="flex flex-row justify-center overflow-x-auto">
         <table class="w-[90%] table-fixed tracking-wide">
-            <colgroup v-for="column in personItems">
-                <col :class="getColor(column, 50)" />
+
+            <colgroup v-for="column in personItems" class="z-10">
+                <col :class=getColumnColor(column) class="">
             </colgroup>
             <thead>
                 <draggable
@@ -94,20 +117,12 @@ async function pageButtonClick(pageNum) {
                     ghost-class="ghost"
                 >
                 <template #item="{ element: column }">
-                    <th
-                        scope="col"
-                        :class="getColor(column, 200)"
-                        class="cursor-move py-5"
-                    >
-                        <span>{{ convertColumnNames(column) }}</span>
-                        <span
-                            @click="holdEntireSortResult(column)"
-                            class="pl-2 cursor-pointer"
-                        >
-                            <font-awesome-icon
-                                icon="fa-solid fa-sort"
-                                class="text-gray-500 opacity-50 hover:text-black"
-                            />
+                    <th scope="col"
+                    :class=getThColor(column)
+                    class="cursor-move py-5">
+                        <span class="">{{ convertColumnNames(column) }}</span>
+                        <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
+                            <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50 hover:text-black"/>
                         </span>
                     </th>
                 </template>

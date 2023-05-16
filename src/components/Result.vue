@@ -1,14 +1,14 @@
 <script setup>
 
-import { onBeforeMount, ref, watch } from 'vue';
-import { useFetchData } from '../composables/useFetch';
-import { useSearch } from '../composables/useSearch';
-import { useSort } from '../composables/useSort';
-import { useFormat } from '../composables/useFormat';
-import PlanetPopup from './PlanetPopup.vue';
+import { onBeforeMount, ref, watch } from 'vue'
+import { useFetchData } from '../composables/useFetch'
+import { useSearch } from '../composables/useSearch'
+import { useSort } from '../composables/useSort'
+import { useFormat } from '../composables/useFormat'
+import PlanetPopup from './PlanetPopup.vue'
 import Page from './Page.vue';
-import { useLocalStorage } from '@vueuse/core';
-import draggable from 'vuedraggable';
+import { useLocalStorage } from '@vueuse/core'
+import draggable from 'vuedraggable'
 
 const { personItems, saveData } = useFetchData();
 
@@ -94,23 +94,24 @@ async function pageButtonClick(pageNum) {
     <div class="flex flex-row justify-center overflow-x-auto">
         <table class="w-[90%] table-fixed tracking-wide">
 
-            <colgroup v-for="column in personItems" class="z-10">
-                <col :class=getColumnColor(column) class="">
+            <colgroup v-for="column in personItems">
+                <col :class=getColumnColor(column)>
             </colgroup>
             <thead>
                 <draggable
-                    v-model="personItems"
+                    :list="personItems"
                     tag="tr"
-                    :item-key="(key) => key"
                     @end="filterByColumns(sortResult)"
+                    :item-key="(key) => key"
                     ghost-class="ghost"
                 >
-                <template #item="{ element: column }">
-                    <th scope="col"
-                    :class=getThColor(column)
+                <template #item="{ element: item }">
+                    <th
+                    scope="col"
+                    :class=getThColor(item)
                     class="cursor-move py-5">
-                        <span class="">{{ convertColumnNames(column) }}</span>
-                        <span @click="holdEntireSortResult(column)" class="pl-2 cursor-pointer">
+                        <span class="">{{ convertColumnNames(item) }}</span>
+                        <span @click="holdEntireSortResult(item)" class="pl-2 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50 hover:text-black"/>
                         </span>
                     </th>

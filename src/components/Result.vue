@@ -48,17 +48,6 @@ function getThColor(column) {
     }[column]
 }
 
-// function getColor(item, saturation = 50) {
-//     return {
-//         name: `bg-red-${saturation}`,
-//         height: `bg-pink-${saturation}`,
-//         mass: `bg-orange-${saturation}`,
-//         created: `bg-lime-${saturation}`,
-//         edited: `bg-teal-${saturation}`,
-//         homeworld: `bg-violet-${saturation}`
-//     }[item]
-// }
-
 const isModalOpened = ref(false);
 const personName = ref('');
 const planet = ref({});

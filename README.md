@@ -1,6 +1,6 @@
-# Vue 3 + Vite + Tailwind CSS(daisyUI)
+## Vue 3 + Vite + Tailwind CSS (daisyUI)
 
-# SWAPI API
+## SWAPI API
 https://swapi.dev/
 
 ## Demo

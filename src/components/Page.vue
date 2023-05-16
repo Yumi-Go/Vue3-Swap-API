@@ -14,7 +14,6 @@ function prevPageButtonClick() {
 }
 
 function nextPageButtonClick() {
-    console.log("lastPageNo: ", lastPageNo.value);
     if (lastPageNo.value === null || currentPageNo.value !== lastPageNo.value ) {
         currentPageNo.value++;
         emit('pageButtonClick', currentPageNo.value);

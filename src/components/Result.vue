@@ -6,11 +6,10 @@ import { useSearch } from '../composables/useSearch'
 import { useSort } from '../composables/useSort'
 import { useFormat } from '../composables/useFormat'
 import PlanetPopup from './PlanetPopup.vue'
-import Page from './Page.vue';
 import { useLocalStorage } from '@vueuse/core'
 import draggable from 'vuedraggable'
 
-const { personItems, saveData } = useFetchData();
+const { personItems, fetchData } = useFetchData();
 
 const allData = useLocalStorage('all', []);
 
@@ -21,7 +20,7 @@ const { convertColumnNames, convertDateFormat } = useFormat();
 const entireSortResult = ref([]);
 
 onBeforeMount(async () => {
-    await saveData(1);
+    await fetchData();
     filterByColumns(allData.value);
     entireSortResult.value = allData.value;
 });
@@ -75,12 +74,6 @@ function openModal(person_name, planetObj) {
     isModalOpened.value = true;
 }
 
-async function pageButtonClick(pageNum) {
-    search.value = '';
-    await saveData(pageNum);
-    filterByColumns(allData.value);
-    entireSortResult.value = allData.value;
-}
 </script>
 
 <template>
@@ -162,9 +155,6 @@ async function pageButtonClick(pageNum) {
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="flex flex-row">
-        <Page @pageButtonClick="pageButtonClick"/>
     </div>
 </template>
 

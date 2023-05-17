@@ -3,61 +3,37 @@ import { useLocalStorage } from '@vueuse/core';
 
 const allData = useLocalStorage('all', []);
 const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld'];
-const currentPageNo = ref();
-const isPrevPageExist = ref(false);
-const isNextPageExist = ref(false);
-const lastPageNo = ref(null);
 
 export function useFetchData() {
     const peopleData = ref([]);
     const planetsData = ref([]);
-    const refinedData = ref([]);
 
-    async function fetchSinglePagePeople(pageNum) {
+    async function fetchData() {
         try {
-            peopleData.value = [];
-            const url = `https://swapi.dev/api/people/?page=${pageNum}`;
-            let singlePagePeoplePromise = [];
-            await fetch(url)
-            .then(res => {
-                if (res.status !== 404) {
-                    singlePagePeoplePromise = res.json();
-                }
-            });
-            await Promise.resolve(singlePagePeoplePromise)
-            .then(singlePageData => {
-                if (singlePageData.previous !== null) {
-                    isPrevPageExist.value = true;
-                } else {
-                    isPrevPageExist.value = false;
-                }
-                if (singlePageData.next !== null) {
-                    isNextPageExist.value = true;
-                } else {
-                    isNextPageExist.value = false;
-                    lastPageNo.value = pageNum;
-                }
-                currentPageNo.value = pageNum;
-                singlePageData.results.forEach(person => {
-                    peopleData.value.push(person);
-                });
-            })
-            .catch(error => {
-                console.log("error", error);
-            });
-            return peopleData.value;
-        } catch (error) {
-            console.log(error);
-        }
-    }
+            const peopleUrls = [];
+            for (let pageNum = 1; pageNum < 10; pageNum++) {
+                const url = `https://swapi.dev/api/people/?page=${pageNum}`;
+                peopleUrls.push(url);
+            }
 
-    async function fetchAllPlanets() {
-        try {
             const planetsUrls = [];
             for (let pageNum = 1; pageNum < 7; pageNum++) {
                 const url = `https://swapi.dev/api/planets/?page=${pageNum}`;
                 planetsUrls.push(url);
             }
+
+            const peoplePromises = [];
+            for (let i = 0; i < peopleUrls.length; i++) {
+                var promise = [];
+                await fetch(peopleUrls[i])
+                .then(res => {
+                    if (res.status !== 404) {
+                        promise = res.json();
+                        peoplePromises.push(promise);
+                    }
+                });
+            }
+
             const planetsPromises = [];
             for (let i = 0; i < planetsUrls.length; i++) {
                 var promise = [];
@@ -69,31 +45,32 @@ export function useFetchData() {
                     }
                 });
             }
-            await Promise.all(planetsPromises)
-            .then(allPagePlanets => {
-                allPagePlanets.forEach(singlePagePlanets => {
-                    singlePagePlanets.results.forEach(planet => {
-                        planetsData.value.push(planet);
+
+            await Promise.all(peoplePromises)
+            .then(allPageData => {
+                allPageData.forEach(eachPageData => {
+                    eachPageData.results.forEach(personData => {
+                        peopleData.value.push(personData);
                     });
                 });
             })
             .catch(error => {
                 console.log("error", error);
             });
-            return planetsData.value;
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
-    async function refineData(pageNum) {
-        try {
-            await fetchSinglePagePeople(pageNum);
-            if (planetsData.value.length < 1) {
-                await fetchAllPlanets();
-            }
-            refinedData.value = [];
-            const singlePageRefinedData = [];
+            await Promise.all(planetsPromises)
+            .then(allPageData => {
+                allPageData.forEach(eachPageData => {
+                    eachPageData.results.forEach(planetData => {
+                        planetsData.value.push(planetData);
+                    });
+                });
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
+
+            const refinedData = [];
             peopleData.value.forEach(person => {
                 const personRefinedData = {};
                 for (const [key, value] of Object.entries(person)) {
@@ -102,22 +79,22 @@ export function useFetchData() {
                             personRefinedData[key] = getHomeworld(value);
                         } else {
                             personRefinedData[key] = value;
-                        }
+                        }                    
                     }
                 }
-                singlePageRefinedData.push(personRefinedData);
+                refinedData.push(personRefinedData);
             });
-            refinedData.value = singlePageRefinedData;
+            storeAllPeopleData(refinedData);
         } catch (error) {
             console.log(error);
         }
     }
 
-    function getHomeworld(planetURL) {
+    function getHomeworld(planetUrl) {
         try {
             const homeworld = {};
             planetsData.value.forEach(planet => {
-                if (planet.url === planetURL) {
+                if (planet.url === planetUrl) {
                     homeworld['name'] = planet.name;
                     homeworld['diameter'] = planet.diameter;
                     homeworld['climate'] = planet.climate;
@@ -128,21 +105,15 @@ export function useFetchData() {
         } catch (error) {
             console.error(error);
         }
+
     }
 
-    async function saveData(pageNum) {
-        try {
-            currentPageNo.value = pageNum;
-            allData.value = [];
-            const people = [];
-            await refineData(pageNum);
-            refinedData.value.forEach(person => {
-                people.push(person);
-            });
-            allData.value = people;
-        } catch (error) {
-            console.error(error);
+    function storeAllPeopleData(refinedData) {
+        if (allData.value.length < 1) {
+            refinedData.forEach(data => allData.value.push(data));
+            console.log("allData: ", allData.value);
         }
     }
-    return { currentPageNo, isPrevPageExist, isNextPageExist, lastPageNo, personItems, saveData }
+
+    return { personItems, fetchData }
 }

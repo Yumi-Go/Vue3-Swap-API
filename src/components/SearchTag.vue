@@ -6,6 +6,7 @@ import { useFormat } from '../composables/useFormat';
 const { checkedColumns } = useSearch();
 const { personItems } = useFetchData();
 const { convertColumnNames } = useFormat();
+const columns = personItems.map((item) => item);
 
 function getColor(column) {
     const checked = checkedColumns.value.includes(column);
@@ -20,8 +21,9 @@ function getColor(column) {
     return `rounded-full ${colors[column]} cursor-pointer`
 }
 
+
 function selectAll() {
-    personItems.forEach(column => {
+    columns.forEach(column => {
         if (!(checkedColumns.value.includes(column))) {
             checkedColumns.value.push(column);
         }
@@ -35,7 +37,7 @@ function deSelectAll() {
 <template>
     <div class="flex flex-row justify-center p-3 mt-5">
         <label
-            v-for="(column, index) in personItems"
+            v-for="(column, index) in columns"
             :key="index"
             class="rounded-full cursor-pointer mx-2 p-2"
             :class="getColor(column)"

@@ -1,28 +1,32 @@
 <script setup>
 
 import { onBeforeMount, ref, watch } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { useFetchData } from '../composables/useFetch'
 import { useSearch } from '../composables/useSearch'
 import { useSort } from '../composables/useSort'
 import { useFormat } from '../composables/useFormat'
 import PlanetPopup from './PlanetPopup.vue'
-import { useLocalStorage } from '@vueuse/core'
+import Page from './Page.vue'
 import draggable from 'vuedraggable'
 
-const { personItems, fetchData } = useFetchData();
-
 const allData = useLocalStorage('all', []);
-
+const { personItems, numberOfItemsPerPage, totalNumberOfPages, fetchData } = useFetchData();
 const { searchResult, search, checkedColumns, filterByColumns } = useSearch();
 const { sortResult, sortTable } = useSort();
 const { convertColumnNames, convertDateFormat } = useFormat();
 
+const currentPage = ref(1);
 const entireSortResult = ref([]);
+const eachPageSortResult = ref([]);
+const startIndexInPage = ref([]);
+const endIndexInPage = ref([]);
 
 onBeforeMount(async () => {
     await fetchData();
     filterByColumns(allData.value);
     entireSortResult.value = allData.value;
+    pageButtonClick(1);
 });
 
 function getColumnColor(column) {
@@ -52,17 +56,20 @@ const personName = ref('');
 const planet = ref({});
 
 watch(search, () => {
-    filterByColumns(entireSortResult.value);
-    sortResult.value = searchResult.value;
+    pageButtonClick(currentPage.value);
+    filterByColumns(eachPageSortResult.value);
+    eachPageSortResult.value = searchResult.value;
 });
 watch(checkedColumns, () => {
-    filterByColumns(entireSortResult.value);
-    sortResult.value = searchResult.value;
+    eachPageSortResult.value = entireSortResult.value.slice(startIndexInPage.value - 1, endIndexInPage.value);
+    filterByColumns(eachPageSortResult.value);
+    eachPageSortResult.value = searchResult.value;
 });
 
-function holdEntireSortResult(column) {
+function holdLatestSortResult(column) {
     sortTable(allData.value, column);
     entireSortResult.value = sortResult.value;
+    eachPageSortResult.value = sortResult.value.slice(startIndexInPage.value - 1, endIndexInPage.value);
 }
 
 function closeModal() {
@@ -74,6 +81,24 @@ function openModal(person_name, planetObj) {
     isModalOpened.value = true;
 }
 
+function setPageData(page) {
+    startIndexInPage.value = (page * numberOfItemsPerPage) - (numberOfItemsPerPage - 1);
+    endIndexInPage.value = Math.min(startIndexInPage.value + numberOfItemsPerPage - 1, allData.value.length);
+}
+
+function pageButtonClick(page) {
+    currentPage.value = page;
+    setPageData(page);
+    console.log(`${startIndexInPage.value} to ${endIndexInPage.value} of ${allData.value.length}`);
+    eachPageSortResult.value = entireSortResult.value.slice(startIndexInPage.value - 1, endIndexInPage.value);
+    console.log(`page ${page} data: `, eachPageSortResult.value);
+}
+
+function dragNdrop() {
+    filterByColumns(entireSortResult.value);
+    eachPageSortResult.value = entireSortResult.value.slice(startIndexInPage.value - 1, endIndexInPage.value);
+}
+
 </script>
 
 <template>
@@ -83,10 +108,8 @@ function openModal(person_name, planetObj) {
         :planet="planet"
         @closeModal="closeModal"
     />
-
     <div class="flex flex-row justify-center overflow-x-auto">
         <table class="w-[90%] table-fixed tracking-wide">
-
             <colgroup v-for="column in personItems">
                 <col :class=getColumnColor(column)>
             </colgroup>
@@ -94,26 +117,29 @@ function openModal(person_name, planetObj) {
                 <draggable
                     :list="personItems"
                     tag="tr"
-                    @end="filterByColumns(sortResult)"
+                    @end="dragNdrop()"
                     :item-key="(key) => key"
                     ghost-class="ghost"
                 >
-                <template #item="{ element: item }">
-                    <th
-                    scope="col"
-                    :class=getThColor(item)
-                    class="cursor-move py-5">
-                        <span class="">{{ convertColumnNames(item) }}</span>
-                        <span @click="holdEntireSortResult(item)" class="pl-2 cursor-pointer">
-                            <font-awesome-icon icon="fa-solid fa-sort" class="text-gray-500 opacity-50 hover:text-black"/>
-                        </span>
-                    </th>
-                </template>
+                    <template #item="{ element: item }">
+                        <th
+                        scope="col"
+                        :class=getThColor(item)
+                        class="cursor-move py-5">
+                            <span class="">{{ convertColumnNames(item) }}</span>
+                            <span @click="holdLatestSortResult(item)" class="pl-2 cursor-pointer">
+                                <font-awesome-icon
+                                    icon="fa-solid fa-sort"
+                                    class="text-gray-500 opacity-50 hover:text-black"
+                                />
+                            </span>
+                        </th>
+                    </template>
                 </draggable>
             </thead>
             <tbody>
                 <tr
-                    v-for="(person, index) in sortResult"
+                    v-for="(person, index) in eachPageSortResult"
                     :key="index"
                     class="border-b-[1px] hover:bg-gray-100"
                 >
@@ -156,8 +182,10 @@ function openModal(person_name, planetObj) {
             </tbody>
         </table>
     </div>
+    <div class="flex flex-row justify-center mt-5">
+        <Page :currentPage="currentPage" @pageButtonClick="pageButtonClick"/>
+    </div>
 </template>
-
 
 <style scoped>
 .ghost {

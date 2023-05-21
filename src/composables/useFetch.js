@@ -3,6 +3,15 @@ import { useLocalStorage } from '@vueuse/core';
 
 const allData = useLocalStorage('all', []);
 const personItems = ['name', 'height', 'mass', 'created', 'edited', 'homeworld'];
+const numberOfItemsPerPage = 10;
+const totalNumberOfPages = ref(0);
+
+function setTotalNumberOfPages() {
+    if (allData.value.length > 0) {
+        totalNumberOfPages.value = Math.ceil(allData.value.length / numberOfItemsPerPage);
+    }
+    console.log("totalNumberOfPages: ", totalNumberOfPages.value);
+}
 
 export function useFetchData() {
     const peopleData = ref([]);
@@ -113,7 +122,8 @@ export function useFetchData() {
             refinedData.forEach(data => allData.value.push(data));
             console.log("allData: ", allData.value);
         }
+        setTotalNumberOfPages();
     }
 
-    return { personItems, fetchData }
+    return { personItems, numberOfItemsPerPage, totalNumberOfPages, fetchData }
 }

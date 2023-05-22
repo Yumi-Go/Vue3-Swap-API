@@ -89,9 +89,7 @@ function setPageData(page) {
 function pageButtonClick(page) {
     currentPage.value = page;
     setPageData(page);
-    console.log(`${startIndexInPage.value} to ${endIndexInPage.value} of ${allData.value.length}`);
     eachPageSortResult.value = entireSortResult.value.slice(startIndexInPage.value - 1, endIndexInPage.value);
-    console.log(`page ${page} data: `, eachPageSortResult.value);
 }
 
 function dragNdrop() {

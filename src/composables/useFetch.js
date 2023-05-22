@@ -10,7 +10,6 @@ function setTotalNumberOfPages() {
     if (allData.value.length > 0) {
         totalNumberOfPages.value = Math.ceil(allData.value.length / numberOfItemsPerPage);
     }
-    console.log("totalNumberOfPages: ", totalNumberOfPages.value);
 }
 
 export function useFetchData() {
@@ -120,7 +119,6 @@ export function useFetchData() {
     function storeAllPeopleData(refinedData) {
         if (allData.value.length < 1) {
             refinedData.forEach(data => allData.value.push(data));
-            console.log("allData: ", allData.value);
         }
         setTotalNumberOfPages();
     }

@@ -3,9 +3,8 @@
 ## SWAPI API
 https://swapi.dev/
 
-## Demo
-- Netlify: https://swap-project.netlify.app/
-- Vercel: https://vue3-swap-api.vercel.app/
+## Demo (Netlify)
+https://swap-project.netlify.app/
 
 ## Description
 I developed Star Wars project which requests API call to swapi api, and then stores data in local storage, and shows data on the web browser. (SWAPI API: https://swapi.dev/)
